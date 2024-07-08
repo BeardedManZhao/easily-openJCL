@@ -2,6 +2,9 @@
 # easily-openJCL
 
 ## 什么是 easily-openJCL
+
+easily-openJCL 是一个轻量级的 Java 语言下的 GPU 计算库，它提供了一套简单易用的 API，让用户能够轻松实现 GPU 计算操作。
+
 通过 Java 调用 GPU 计算的一个库，使用非常简单的API就可以轻松应付 Java 数据类型在 GPU 中的计算操作！easily-openJCL 提供了诸多中计算模式，让我们的计算组件更灵活！
 
 ## 为什么要使用 easily-openJCL
@@ -12,6 +15,13 @@
 
 ```xml
 
+<dependencies>
+    <dependency>
+        <groupId>io.github.BeardedManZhao</groupId>
+        <artifactId>easily-openJCL</artifactId>
+        <version>1.0</version>
+    </dependency>
+</dependencies>
 ```
 
 ### 非常简单的使用
@@ -61,9 +71,48 @@ public class Main {
 
 您可以在这个章节中了解到更详细的文档哦~~~ 其中介绍了计算模式，介绍了自定义实现计算内核等知识！
 
-### 内置的计算模式
+### 繁多的内置计算模式
 
 我们提供了一些常见的内置计算模式，我们可以通过这些模式实现有效的数据计算操作，接下来的表格中详细介绍了不同的计算模式信息！
+
+| 计算模式名称                  | 计算模式支持版本 | 操作数长度规则     | 计算组件解释                       |
+|-------------------------|----------|-------------|------------------------------|
+| ARRAY_ADD_ARRAY_INT     | v1.0     | 两个操作数一致     | 两个 int 数组之间进行加法计算            |
+| ARRAY_SUB_ARRAY_INT     | v1.0     | 两个操作数一致     | 两个 int 数组之间进行减法计算            |
+| ARRAY_MUL_ARRAY_INT     | v1.0     | 两个操作数一致     | 两个 int 数组之间进行乘法计算            |
+| ARRAY_DIV_ARRAY_INT     | v1.0     | 两个操作数一致     | 两个 int 数组之间进行除法计算            |
+| ARRAY_LS_ARRAY_INT      | v1.0     | 两个操作数一致     | 两个 int 数组之间进行左移计算            |
+| ARRAY_RS_ARRAY_INT      | v1.0     | 两个操作数一致     | 两个 int 数组之间进行右移计算            |
+| ARRAY_ADD_ARRAY_FLOAT   | v1.0     | 两个操作数一致     | 两个 float 数组之间进行加法计算          |
+| ARRAY_SUB_ARRAY_FLOAT   | v1.0     | 两个操作数一致     | 两个 float 数组之间进行减法计算          |
+| ARRAY_MUL_ARRAY_FLOAT   | v1.0     | 两个操作数一致     | 两个 float 数组之间进行乘法计算          |
+| ARRAY_DIV_ARRAY_FLOAT   | v1.0     | 两个操作数一致     | 两个 float 数组之间进行除法计算          |
+| ARRAY_LS_ARRAY_FLOAT    | v1.0     | 两个操作数一致     | 两个 float 数组之间进行左移计算          |
+| ARRAY_RS_ARRAY_FLOAT    | v1.0     | 两个操作数一致     | 两个 float 数组之间进行右移计算          |
+| ARRAY_ADD_ARRAY_DOUBLE  | v1.0     | 两个操作数一致     | 两个 double 数组之间进行加法计算         |
+| ARRAY_SUB_ARRAY_DOUBLE  | v1.0     | 两个操作数一致     | 两个 double 数组之间进行减法计算         |
+| ARRAY_MUL_ARRAY_DOUBLE  | v1.0     | 两个操作数一致     | 两个 double 数组之间进行乘法计算         |
+| ARRAY_DIV_ARRAY_DOUBLE  | v1.0     | 两个操作数一致     | 两个 double 数组之间进行除法计算         |
+| ARRAY_LS_ARRAY_DOUBLE   | v1.0     | 两个操作数一致     | 两个 double 数组之间进行左移计算         |
+| ARRAY_RS_ARRAY_DOUBLE   | v1.0     | 两个操作数一致     | 两个 double 数组之间进行右移计算         |
+| ARRAY_ADD_NUMBER_INT    | v1.0     | 第二个操作数为1个元素 | int 数组和 int数值 之间进行加法计算       |
+| ARRAY_SUB_NUMBER_INT    | v1.0     | 第二个操作数为1个元素 | int 数组和 int数值 之间进行加法计算       |
+| ARRAY_MUL_NUMBER_INT    | v1.0     | 第二个操作数为1个元素 | int 数组和 int数值 之间进行加法计算       |
+| ARRAY_DIV_NUMBER_INT    | v1.0     | 第二个操作数为1个元素 | int 数组和 int数值 之间进行加法计算       |
+| ARRAY_LS_NUMBER_INT     | v1.0     | 第二个操作数为1个元素 | int 数组和 int数值 之间进行加法计算       |
+| ARRAY_RS_NUMBER_INT     | v1.0     | 第二个操作数为1个元素 | int 数组和 int数值 之间进行加法计算       |
+| ARRAY_ADD_NUMBER_FLOAT  | v1.0     | 第二个操作数为1个元素 | float 数组和 float数值 之间进行加法计算   |
+| ARRAY_SUB_NUMBER_FLOAT  | v1.0     | 第二个操作数为1个元素 | float 数组和 float数值 之间进行加法计算   |
+| ARRAY_MUL_NUMBER_FLOAT  | v1.0     | 第二个操作数为1个元素 | float 数组和 float数值 之间进行加法计算   |
+| ARRAY_DIV_NUMBER_FLOAT  | v1.0     | 第二个操作数为1个元素 | float 数组和 float数值 之间进行加法计算   |
+| ARRAY_LS_NUMBER_FLOAT   | v1.0     | 第二个操作数为1个元素 | float 数组和 float数值 之间进行加法计算   |
+| ARRAY_RS_NUMBER_FLOAT   | v1.0     | 第二个操作数为1个元素 | float 数组和 float数值 之间进行加法计算   |
+| ARRAY_ADD_NUMBER_DOUBLE | v1.0     | 第二个操作数为1个元素 | double 数组和 double数值 之间进行加法计算 |
+| ARRAY_SUB_NUMBER_DOUBLE | v1.0     | 第二个操作数为1个元素 | double 数组和 double数值 之间进行加法计算 |
+| ARRAY_MUL_NUMBER_DOUBLE | v1.0     | 第二个操作数为1个元素 | double 数组和 double数值 之间进行加法计算 |
+| ARRAY_DIV_NUMBER_DOUBLE | v1.0     | 第二个操作数为1个元素 | double 数组和 double数值 之间进行加法计算 |
+| ARRAY_LS_NUMBER_DOUBLE  | v1.0     | 第二个操作数为1个元素 | double 数组和 double数值 之间进行加法计算 |
+| ARRAY_RS_NUMBER_DOUBLE  | v1.0     | 第二个操作数为1个元素 | double 数组和 double数值 之间进行加法计算 |
 
 #### 数组与数组的计算模式
 
@@ -96,7 +145,7 @@ public class Main {
 
             System.out.println("================");
 
-            // 准备两个 double 数组 第二个整形数组只有一个元素 因为 ARRAY_MUL_NUMBER 元素代表的就是 数组和一个元素进行计算
+            // 准备两个 double 数组
             final double[] srcArrayA1 = new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
             final double[] srcArrayB1 = new double[]{2, 4, 2, 4, 2, 4, 2, 4, 2, 4};
             final double[] dstArray1 = new double[srcArrayA1.length];
@@ -118,7 +167,7 @@ public class Main {
 ```
 #### 数组与数值的计算模式
 
-```
+```java
 import io.github.BeardedManZhao.easilyJopenCL.EasilyOpenJCL;
 import io.github.BeardedManZhao.easilyJopenCL.kernel.KernelSource;
 
@@ -164,5 +213,55 @@ public class Main {
 }
 ```
 
+下面是计算结果
+
+```
+[11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0]
+================
+[2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0]
+```
 ### 自定义计算模式
 
+```java
+import io.github.BeardedManZhao.easilyJopenCL.EasilyOpenJCL;
+import io.github.BeardedManZhao.easilyJopenCL.kernel.KernelSource;
+
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        // 自定义的实现一个计算模式
+        final KernelSource kernelSourceUDF = new KernelSource(
+                // args1[0]=数组1的引用对象  args1[1]=数组2的引用对象  args1[2]=当前计算操作位于的索引  args1[3]=结果数组的引用对象
+                // 这里是 结果数组[0] = 数组1[i] + 数组2[i] + 1
+                // 第二个参数代表的是该计算模式 可计算的类型为 int
+                // 第三个参数代表的是该计算模式的名称
+                args1 -> String.format("%s[%s] = %s[%s] + %s[%s] + 1;", args1[3], args1[2], args1[0], args1[2], args1[1], args1[2]), "int", "MyUdfModel"
+        );
+
+        // 准备一个 显卡计算组件！ 在其中的结尾部分加上我们要使用的计算模式
+        final EasilyOpenJCL easilyOpenJCL = EasilyOpenJCL.initOpenCLEnvironment(
+                // 在这里我们直接将自己实现的计算组件传递进来
+                kernelSourceUDF
+        );
+
+        // 判断是否已经释放 如果没有释放才可以继续操作
+        if (easilyOpenJCL.isNotReleased()) {
+            // 这里代表 srcArrayA 和 srcArrayB 的相同索引元素相加 最后加1 实现赋值操作
+            final int[] srcArrayA = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+            final int[] srcArrayB = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 11};
+            final int[] dstArray = new int[srcArrayA.length];
+            // 直接开始 使用我们自己实现的 kernelSourceUDF 模式计算
+            easilyOpenJCL.calculate(srcArrayA, srcArrayB, dstArray, kernelSourceUDF);
+            // 获取到结果
+            System.out.println(Arrays.toString(dstArray));
+        }
+        // 释放组件
+        easilyOpenJCL.releaseResources();
+    }
+}
+```
+这是计算结果
+```
+[3, 5, 7, 9, 11, 13, 15, 17, 19, 22]
+```
