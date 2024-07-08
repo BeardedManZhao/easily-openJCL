@@ -12,7 +12,7 @@ import static org.jocl.CL.*;
  * <p>
  * Ultra simple OpenCL calling component, you can use it to perform very simple and easy OpenCL graphics card operations!
  *
- * @author zhao
+ * @author zhao - 赵凌宇
  */
 public class EasilyOpenJCL {
     private final cl_context context;

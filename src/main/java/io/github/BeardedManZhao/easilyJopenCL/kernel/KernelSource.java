@@ -2,6 +2,8 @@ package io.github.BeardedManZhao.easilyJopenCL.kernel;
 
 /**
  * openCL 中计算操作的源码实现
+ *
+ * @author zhao - 赵凌宇
  */
 @SuppressWarnings("unused")
 public class KernelSource {

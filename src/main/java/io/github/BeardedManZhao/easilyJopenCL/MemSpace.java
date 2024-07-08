@@ -9,7 +9,7 @@ import static org.jocl.CL.*;
 /**
  * 内存空间分配器，在这里我们可以创建计算时间使用的内存空间
  *
- * @author zhao
+ * @author zhao - 赵凌宇
  */
 public class MemSpace {
     final cl_mem srcMemA;

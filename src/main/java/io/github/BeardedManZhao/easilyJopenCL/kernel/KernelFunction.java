@@ -2,6 +2,8 @@ package io.github.BeardedManZhao.easilyJopenCL.kernel;
 
 /**
  * 内核计算函数实现组件
+ *
+ * @author zhao - 赵凌宇
  */
 public interface KernelFunction {
 
