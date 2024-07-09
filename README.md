@@ -3,7 +3,7 @@
 
 ## 什么是 easily-openJCL
 
-easily-openJCL 是一个轻量级的 Java 语言下的 GPU 计算库，它提供了一套简单易用的 API，让用户能够轻松实现 GPU 计算操作。
+easily-openJCL 是一个轻量级的 Java 语言下的 GPU 显卡 计算库，它提供了一套简单易用的 API，让用户能够轻松实现 GPU 计算操作。
 
 通过 Java 调用 GPU 计算的一个库，使用非常简单的API就可以轻松应付 Java 数据类型在 GPU 中的计算操作！easily-openJCL 提供了诸多中计算模式，让我们的计算组件更灵活！
 
