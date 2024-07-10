@@ -266,9 +266,83 @@ public class Main {
 [3, 5, 7, 9, 11, 13, 15, 17, 19, 22]
 ```
 
+### 灵活的API
+
+我们在计算模式章节中，演示的都是将结果存储到已经存在的数组中，实际上，您可以不去将结果存储到已经存在的数组中，而是通过回调函数直接调用内存映射过来的
+byteBuffer，下面是一个示例！
+
+```java
+import io.github.BeardedManZhao.easilyJopenCL.EasilyOpenJCL;
+import io.github.BeardedManZhao.easilyJopenCL.kernel.KernelSource;
+
+public class Main {
+    public static void main(String[] args0) {
+        final EasilyOpenJCL easilyOpenJCL = EasilyOpenJCL.initOpenCLEnvironment(
+                KernelSource.ARRAY_ADD_ARRAY_INT
+        );
+        // 准备两个数组
+        final int[] srcArrayA = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37};
+        final int[] srcArrayB = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200, 3300, 3400, 3500, 3600, 3700};
+        // 直接将两个数组进行求和计算 值得一提的是 我们没有准备结果数组的容器 而是直接在回调哈数中将其打印了出来
+        easilyOpenJCL.calculate(srcArrayA, srcArrayB, (result) -> {
+            for (int i = 0; i < srcArrayA.length; i++) {
+                // 值得注意的是，在这里由于我们是直接操作的内存，一个 int 数值占4个字节，所以 i * 4 才可以获取到正确的结果 因为 每 4 个字节读取一次 正好读取到下一个数值
+                System.out.println(result.getInt(i * 4));
+            }
+        }, srcArrayA.length, KernelSource.ARRAY_ADD_ARRAY_INT);
+    }
+}
+```
+
+## 测试案例
+
+### 基准测试
+
+> 下面是一个数学表达式计算的基准测试示例，当 CPU 的计算量足够庞大的时候，GPU 的运算速度会远高于 CPU 的运算速度，但是当 CPU
+> 的运算量足够小的时候，GPU 的运算速度会远低于 CPU 的运算速度。在不同电脑上，运算速度也会有差异，您可以尝试修改下面的数学表达式，来增大或减小
+> CPU 和 GPU 的计算量！
+> 但不论如何，您增加数学表达式的复杂度的时候，CPU的运算速度会增加，然而GPU的运算速度几乎不会增加，这是因为 GPU 的并行计算。
+
+```java
+import io.github.BeardedManZhao.easilyJopenCL.EasilyOpenJCL;
+import io.github.BeardedManZhao.easilyJopenCL.kernel.KernelSource;
+
+public class Main {
+    public static void main(String[] args0) {
+        // 这个地方的数学表达式 以及下面 for 循环中的 数学表达式 都是相同的，只是为了测试GPU 和 CPU 的计算差异，这个表达式越复杂 计算量就会越大，但数据拷贝量不会有变化，这可能会让 CPU 处于劣势
+        final KernelSource kernelSource = new KernelSource(args -> "c[gid] = ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (1024 * a[gid]))))) - ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (1024 * a[gid]))))) + 1;", "double", "MY");
+        final EasilyOpenJCL easilyOpenJCL = EasilyOpenJCL.initOpenCLEnvironment(
+                kernelSource
+        );
+        // 这个数组的长度代表的是操作数的数据量 这个数值越大 计算量会成倍增大，同时数据拷贝量也会成倍增加，这将会让 GPU 计算处于劣势
+        final double[] a = new double[Integer.MAX_VALUE >> 7];
+        for (int i = 0; i < a.length; i++) {
+            a[i] = i + 10;
+        }
+        final double[] b = {2};
+        final double[] c = new double[a.length];
+
+        // 热身
+        easilyOpenJCL.calculate(a, b, c, kernelSource);
+
+        // 正式计算
+        final long l = System.currentTimeMillis();
+        easilyOpenJCL.calculate(a, b, c, kernelSource);
+        final long l1 = System.currentTimeMillis();
+        System.out.println("GPU计算耗时：" + (l1 - l) + " 第一个元素结果 = " + c[0]);
+
+        for (int gid = 0; gid < a.length; gid++) {
+            c[gid] = ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (1024 * a[gid]))))) - ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (1024 * a[gid]))))) + 1;
+        }
+        final long l2 = System.currentTimeMillis();
+        System.out.println("CPU计算耗时：" + (l2 - l1) + " 第一个元素结果 = " + c[0]);
+    }
+}
+```
+
 ## 更新记录
 
-### 2024-07-10 1.0.1 版本正在开发中
+### 2024-07-10 1.0.1 版本发布
 
 - 在本次更新中，我们针对获取到 EasilyOpenJCL 实例的函数进行了优化，允许使用者自己来决定要使用的平台和设备等信息，下面是关于该函数的使用示例。
 
@@ -314,3 +388,6 @@ public class Main {
     }
 }
 ```
+
+- 本次更新对于数据传输进行了一些优化，相较于上一个版本 速度提升了数倍，未来还将继续提升和优化！
+

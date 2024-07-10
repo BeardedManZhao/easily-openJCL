@@ -3,7 +3,10 @@ package io.github.BeardedManZhao.easilyJopenCL;
 import io.github.BeardedManZhao.easilyJopenCL.kernel.KernelSource;
 import org.jocl.*;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.HashMap;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static org.jocl.CL.*;
@@ -138,12 +141,7 @@ public class EasilyOpenJCL {
      *                   The kernel name to be used in this calculation
      */
     public void calculate(int[] srcArrayA, int[] srcArrayB, int[] dstArray, KernelSource kernelName) {
-        final cl_kernel clKernel = getOrThrow(kernelName);
-        final Pointer srcA = Pointer.to(srcArrayA);
-        final Pointer srcB = Pointer.to(srcArrayB);
-        final Pointer dst = Pointer.to(dstArray);
-        final MemSpace memSpace = new MemSpace(this.context, srcA, srcB, srcArrayA.length, srcArrayB.length, dstArray.length, Sizeof.cl_int);
-        kernelCalculate(dstArray.length, clKernel, memSpace.srcMemA, memSpace.srcMemB, memSpace.dstMem, dst, Sizeof.cl_int, new long[]{Math.max(srcArrayA.length, srcArrayB.length)}, kernelName);
+        calculate(srcArrayA, srcArrayB, byteBuffer -> byteBuffer.asIntBuffer().get(dstArray), dstArray.length, kernelName);
     }
 
     /**
@@ -165,12 +163,7 @@ public class EasilyOpenJCL {
      *                   The kernel name to be used in this calculation
      */
     public void calculate(float[] srcArrayA, float[] srcArrayB, float[] dstArray, KernelSource kernelName) {
-        final cl_kernel clKernel = getOrThrow(kernelName);
-        final Pointer srcA = Pointer.to(srcArrayA);
-        final Pointer srcB = Pointer.to(srcArrayB);
-        final Pointer dst = Pointer.to(dstArray);
-        final MemSpace memSpace = new MemSpace(this.context, srcA, srcB, srcArrayA.length, srcArrayB.length, dstArray.length, Sizeof.cl_float);
-        kernelCalculate(dstArray.length, clKernel, memSpace.srcMemA, memSpace.srcMemB, memSpace.dstMem, dst, Sizeof.cl_float, new long[]{Math.max(srcArrayA.length, srcArrayB.length)}, kernelName);
+        calculate(srcArrayA, srcArrayB, byteBuffer -> byteBuffer.asFloatBuffer().get(dstArray), dstArray.length, kernelName);
     }
 
     /**
@@ -192,12 +185,103 @@ public class EasilyOpenJCL {
      *                   The kernel name to be used in this calculation
      */
     public void calculate(double[] srcArrayA, double[] srcArrayB, double[] dstArray, KernelSource kernelName) {
+        calculate(srcArrayA, srcArrayB, byteBuffer -> byteBuffer.asDoubleBuffer().get(dstArray), dstArray.length, kernelName);
+    }
+
+    /**
+     * 调用显卡 进行计算数组与数组之间的计算操作
+     * <p>
+     * Calling the graphics card to perform calculation operations between arrays
+     *
+     * @param srcArrayA  需要被计算的数组1
+     *                   <p>
+     *                   Array 1 that needs to be calculated
+     * @param srcArrayB  需要被计算的数组2
+     *                   <p>
+     *                   Array 2 that needs to be calculated
+     * @param resultFunc 结果处理函数，此函数会在计算成功之后，将内存中的结果映射到ByteBuffer中，我们可以通过这个函数直接操作结果，有效的避免拷贝
+     *                   <p>
+     *                   Result processing function, which maps the results in memory to ByteBuffer after successful calculation. We can directly manipulate the results through this function, effectively avoiding copying
+     * @param dstArrayLength 结果数组的长度
+     *                       <p>
+     *                       The length of the result array
+     * @param kernelName 本次计算要使用的内核名称
+     *                   <p>
+     *                   The kernel name to be used in this calculation
+     */
+    public void calculate(int[] srcArrayA, int[] srcArrayB, Consumer<ByteBuffer> resultFunc, long dstArrayLength, KernelSource kernelName) {
         final cl_kernel clKernel = getOrThrow(kernelName);
-        final Pointer srcA = Pointer.to(srcArrayA);
-        final Pointer srcB = Pointer.to(srcArrayB);
-        final Pointer dst = Pointer.to(dstArray);
-        final MemSpace memSpace = new MemSpace(this.context, srcA, srcB, srcArrayA.length, srcArrayB.length, dstArray.length, Sizeof.cl_double);
-        kernelCalculate(dstArray.length, clKernel, memSpace.srcMemA, memSpace.srcMemB, memSpace.dstMem, dst, Sizeof.cl_double, new long[]{Math.max(srcArrayA.length, srcArrayB.length)}, kernelName);
+        kernelCalculate(srcArrayA.length, srcArrayB.length, resultFunc, dstArrayLength, kernelName, Pointer.to(srcArrayA), Pointer.to(srcArrayB), clKernel, Sizeof.cl_int);
+    }
+
+    /**
+     * 调用显卡 进行计算数组与数组之间的计算操作
+     * <p>
+     * Calling the graphics card to perform calculation operations between arrays
+     *
+     * @param srcArrayA  需要被计算的数组1
+     *                   <p>
+     *                   Array 1 that needs to be calculated
+     * @param srcArrayB  需要被计算的数组2
+     *                   <p>
+     *                   Array 2 that needs to be calculated
+     * @param resultFunc 结果处理函数，此函数会在计算成功之后，将内存中的结果映射到ByteBuffer中，我们可以通过这个函数直接操作结果，有效的避免拷贝
+     *                   <p>
+     *                   Result processing function, which maps the results in memory to ByteBuffer after successful calculation. We can directly manipulate the results through this function, effectively avoiding copying
+     * @param dstArrayLength 结果数组的长度
+     *                       <p>
+     *                       The length of the result array
+     * @param kernelName 本次计算要使用的内核名称
+     *                   <p>
+     *                   The kernel name to be used in this calculation
+     */
+    public void calculate(float[] srcArrayA, float[] srcArrayB, Consumer<ByteBuffer> resultFunc, long dstArrayLength, KernelSource kernelName) {
+        final cl_kernel clKernel = getOrThrow(kernelName);
+        kernelCalculate(srcArrayA.length, srcArrayB.length, resultFunc, dstArrayLength, kernelName, Pointer.to(srcArrayA), Pointer.to(srcArrayB), clKernel, Sizeof.cl_float);
+    }
+
+    /**
+     * 调用显卡 进行计算数组与数组之间的计算操作
+     * <p>
+     * Calling the graphics card to perform calculation operations between arrays
+     *
+     * @param srcArrayA  需要被计算的数组1
+     *                   <p>
+     *                   Array 1 that needs to be calculated
+     * @param srcArrayB  需要被计算的数组2
+     *                   <p>
+     *                   Array 2 that needs to be calculated
+     * @param resultFunc 结果处理函数，此函数会在计算成功之后，将内存中的结果映射到ByteBuffer中，我们可以通过这个函数直接操作结果，有效的避免拷贝
+     *                   <p>
+     *                   Result processing function, which maps the results in memory to ByteBuffer after successful calculation. We can directly manipulate the results through this function, effectively avoiding copying
+     * @param dstArrayLength 结果数组的长度
+     *                       <p>
+     *                       The length of the result array
+     * @param kernelName 本次计算要使用的内核名称
+     *                   <p>
+     *                   The kernel name to be used in this calculation
+     */
+    public void calculate(double[] srcArrayA, double[] srcArrayB, Consumer<ByteBuffer> resultFunc, long dstArrayLength, KernelSource kernelName) {
+        final cl_kernel clKernel = getOrThrow(kernelName);
+        kernelCalculate(srcArrayA.length, srcArrayB.length, resultFunc, dstArrayLength, kernelName, Pointer.to(srcArrayA), Pointer.to(srcArrayB), clKernel, Sizeof.cl_double);
+    }
+
+    /**
+     * 调用显卡 进行计算数组与数组之间的计算操作
+     *
+     * @param srcArrayA      需要被计算的数组1 的长度
+     * @param srcArrayB      需要被计算的数组2 的长度
+     * @param resultFunc     结果处理函数，此函数会在计算成功之后，将内存中的结果映射到ByteBuffer中，我们可以通过这个函数直接操作结果，有效的避免拷贝
+     * @param dstArrayLength 结果长度
+     * @param kernelName     本次计算要使用的内核名称
+     * @param p1             数组1的内存地址
+     * @param p2             数组2的内存地址
+     * @param clKernel       获取到的计算内核
+     * @param sizeOf         数组1和数组2中元素的大小
+     */
+    private void kernelCalculate(long srcArrayA, long srcArrayB, Consumer<ByteBuffer> resultFunc, long dstArrayLength, KernelSource kernelName, Pointer p1, Pointer p2, cl_kernel clKernel, int sizeOf) {
+        final MemSpace memSpace = new MemSpace(this.context, p1, p2, srcArrayA, srcArrayB, dstArrayLength, sizeOf);
+        kernelCalculateWithMapping(srcArrayA, clKernel, memSpace.srcMemA, memSpace.srcMemB, memSpace.dstMem, sizeOf, new long[]{Math.max(srcArrayA, srcArrayB)}, kernelName, resultFunc);
     }
 
     /**
@@ -222,31 +306,49 @@ public class EasilyOpenJCL {
      * @param srcMemA          要被计算的数组1
      * @param srcMemB          要被计算的数组2
      * @param dstMem           计算之后的结果存储位
-     * @param dst              计算之后的结果存储位
      * @param sizeOf           数组中每个元素所占的大小
      * @param global_work_size 当前要计算的全局尺寸 通常情况下，描述的就是我们的操作数的长宽，一维数组就只有一个元素 代表长度
      * @param kernelName       当前计算操作中 使用的核类型，用于计算工作维度
+     * @param resultFunc       结果处理函数，此函数会在计算成功之后，将内存中的结果映射到ByteBuffer中，我们可以通过这个函数直接操作结果，有效的避免拷贝
+     *                         <p>
+     *                         Result processing function, which maps the results in memory to ByteBuffer after successful calculation. We can directly manipulate the results through this function, effectively avoiding copying
      */
-    private void kernelCalculate(long n, cl_kernel clKernel, cl_mem srcMemA, cl_mem srcMemB, cl_mem dstMem, Pointer dst, int sizeOf, long[] global_work_size, KernelSource kernelName) {
+    private void kernelCalculateWithMapping(long n, cl_kernel clKernel, cl_mem srcMemA, cl_mem srcMemB, cl_mem dstMem,
+                                            int sizeOf, long[] global_work_size, KernelSource kernelName,
+                                            Consumer<ByteBuffer> resultFunc) {
         // 设置内核参数
         int argIndex = 0;
-        // cl_mem 是一个类型，代表了 OpenCL 内存对象，它是 OpenCL 中用于在设备（如 GPU 或 CPU）之间传输数据的主要机制。cl_mem 对象可以表示各种类型的内存区域，包括缓冲区（buffers）、图像（images）和其他设备上的内存资源。
         clSetKernelArg(clKernel, argIndex++, Sizeof.cl_mem, Pointer.to(srcMemA));
         clSetKernelArg(clKernel, argIndex++, Sizeof.cl_mem, Pointer.to(srcMemB));
         clSetKernelArg(clKernel, argIndex, Sizeof.cl_mem, Pointer.to(dstMem));
 
-        // 执行内核
+        // 执行内核并获取事件
+        cl_event kernelEvent = new cl_event();
         clEnqueueNDRangeKernel(this.commandQueue, clKernel, kernelName.work_dim_algorithm(global_work_size), null,
-                global_work_size, null, 0, null, null);
+                global_work_size, null, 0, null, kernelEvent);
 
-        // 读取输出数据
-        clEnqueueReadBuffer(this.commandQueue, dstMem, CL_TRUE, 0,
-                n * sizeOf, dst, 0, null, null);
+        // 映射输出数据缓冲区到主机内存，使用内核事件作为依赖
+        // 映射内存对象以拷贝数据
+        ByteBuffer dstMapped = clEnqueueMapBuffer(this.commandQueue, dstMem, CL_TRUE, CL_MAP_READ, 0,
+                n * sizeOf, 1, new cl_event[]{kernelEvent}, null, null);
 
-        // 释放内存对象
+        dstMapped.order(ByteOrder.nativeOrder());
+
+        // 等待内核执行完成，虽然在这里调用clWaitForEvents不是必须的，
+        // 因为映射操作已经依赖于内核事件，但保留此行可以提供额外的安全性
+        clWaitForEvents(1, new cl_event[]{kernelEvent});
+
+        // 使用映射后的数据
+        resultFunc.accept(dstMapped);
+
+        // 解映射缓冲区
+        clEnqueueUnmapMemObject(this.commandQueue, dstMem, dstMapped, 0, null, null);
+
+        // 释放内存对象和事件
         clReleaseMemObject(srcMemA);
         clReleaseMemObject(srcMemB);
         clReleaseMemObject(dstMem);
+        clReleaseEvent(kernelEvent);
     }
 
     /**
