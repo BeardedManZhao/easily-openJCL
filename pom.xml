@@ -25,7 +25,7 @@
 
     <groupId>io.github.BeardedManZhao</groupId>
     <artifactId>easily-openJCL</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
     <name>easily-openJCL</name>
     <description>easily-openJCL</description>

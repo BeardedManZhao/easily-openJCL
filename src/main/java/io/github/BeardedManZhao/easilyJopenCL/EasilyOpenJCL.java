@@ -4,6 +4,7 @@ import io.github.BeardedManZhao.easilyJopenCL.kernel.KernelSource;
 import org.jocl.*;
 
 import java.util.HashMap;
+import java.util.function.Function;
 
 import static org.jocl.CL.*;
 
@@ -19,7 +20,6 @@ public class EasilyOpenJCL {
     private final cl_command_queue commandQueue;
     private final cl_program program;
     private final HashMap<String, cl_kernel> kernels = new HashMap<>();
-
     private boolean isNotReleased = true;
 
     public EasilyOpenJCL(cl_context context, cl_command_queue commandQueue, KernelSource... kernelSources) {
@@ -48,16 +48,40 @@ public class EasilyOpenJCL {
         }
     }
 
+    /**
+     * 初始化OpenCL环境并返回一个EasilyOpenJCL操作实例，用于执行OpenCL计算任务。值得注意的是，此函数将会使用默认的OpenCL平台和默认的设备类型。您可以调用 {@code initOpenCLEnvironment(int platformIndex, long deviceType, int deviceIndex, KernelSource... kernelSources)} 方法来选择其他平台或设备类型。
+     *
+     * @param kernelSources 内核源对象数组 - 包含要编译和加载的OpenCL内核源代码。
+     *                      这些内核将在选定的设备上运行，选择了哪些，则返回的 EasilyOpenJCL 就可以支持哪些内核计算。
+     * @return EasilyOpenJCL 操作对象 - 提供了对OpenCL上下文、命令队列和内核的访问，
+     * 允许用户执行异步计算任务。
+     */
     public static EasilyOpenJCL initOpenCLEnvironment(KernelSource... kernelSources) {
+        return initOpenCLEnvironment((c) -> 0, CL_DEVICE_TYPE_ALL, (c) -> 0, kernelSources);
+    }
+
+    /**
+     * 初始化OpenCL环境并返回一个EasilyOpenJCL操作实例，用于执行OpenCL计算任务。
+     *
+     * @param platformIndex 实现此函数，返回的应是 平台索引 - 用于指定从哪些可用的OpenCL平台上进行选择。
+     *                      OpenCL平台通常代表了不同的硬件供应商，例如Intel、AMD或NVIDIA，
+     *                      并且每个平台可能支持不同版本的OpenCL标准。
+     * @param deviceType    设备类型 - 用于指定所选平台上的设备类别。
+     *                      设备类型可以是CPU、GPU或其他类型的加速器。
+     *                      可以通过枚举{@code CL_DEVICE_TYPE_ALL}、{@code CL_DEVICE_TYPE_CPU}、
+     *                      {@code CL_DEVICE_TYPE_GPU}或它们的组合来指定。
+     * @param deviceIndex   实现此函数，返回的应是 设备索引 - 在给定的平台和设备类型下，用于选择具体的设备。
+     *                      如果同一平台上有多个相同类型的设备，此参数用于区分它们。
+     * @param kernelSources 内核源对象数组 - 包含要编译和加载的OpenCL内核源代码。
+     *                      这些内核将在选定的设备上运行，选择了哪些，则返回的 EasilyOpenJCL 就可以支持哪些内核计算。
+     * @return EasilyOpenJCL 操作对象 - 提供了对OpenCL上下文、命令队列和内核的访问，
+     * 允许用户执行异步计算任务。
+     */
+    public static EasilyOpenJCL initOpenCLEnvironment(Function<cl_platform_id[], Integer> platformIndex, long deviceType, Function<cl_device_id[], Integer> deviceIndex, KernelSource... kernelSources) {
         cl_context context;
         cl_command_queue commandQueue;
         // 启用异常处理，从而省略后续的错误检查
         CL.setExceptionsEnabled(true);
-
-        // 指定平台、设备类型和设备索引
-        final int platformIndex = 0;
-        final long deviceType = CL_DEVICE_TYPE_ALL;
-        final int deviceIndex = 0;
 
         // 获取平台的数量
         int[] numPlatformsArray = new int[1];
@@ -67,7 +91,7 @@ public class EasilyOpenJCL {
         // 获取平台ID
         cl_platform_id[] platforms = new cl_platform_id[numPlatforms];
         clGetPlatformIDs(platforms.length, platforms, null);
-        cl_platform_id platform = platforms[platformIndex];
+        cl_platform_id platform = platforms[platformIndex.apply(platforms)];
 
         // 初始化上下文属性
         cl_context_properties contextProperties = new cl_context_properties();
@@ -81,7 +105,7 @@ public class EasilyOpenJCL {
         // 获取设备ID
         cl_device_id[] devices = new cl_device_id[numDevices];
         clGetDeviceIDs(platform, deviceType, numDevices, devices, null);
-        cl_device_id device = devices[deviceIndex];
+        cl_device_id device = devices[deviceIndex.apply(devices)];
 
         // 为选定的设备创建上下文
         context = clCreateContext(
