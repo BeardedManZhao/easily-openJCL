@@ -75,44 +75,48 @@ public class Main {
 
 我们提供了一些常见的内置计算模式，我们可以通过这些模式实现有效的数据计算操作，接下来的表格中详细介绍了不同的计算模式信息！
 
-| 计算模式名称                  | 计算模式支持版本 | 操作数长度规则     | 计算组件解释                       |
-|-------------------------|----------|-------------|------------------------------|
-| ARRAY_ADD_ARRAY_INT     | v1.0     | 两个操作数一致     | 两个 int 数组之间进行加法计算            |
-| ARRAY_SUB_ARRAY_INT     | v1.0     | 两个操作数一致     | 两个 int 数组之间进行减法计算            |
-| ARRAY_MUL_ARRAY_INT     | v1.0     | 两个操作数一致     | 两个 int 数组之间进行乘法计算            |
-| ARRAY_DIV_ARRAY_INT     | v1.0     | 两个操作数一致     | 两个 int 数组之间进行除法计算            |
-| ARRAY_LS_ARRAY_INT      | v1.0     | 两个操作数一致     | 两个 int 数组之间进行左移计算            |
-| ARRAY_RS_ARRAY_INT      | v1.0     | 两个操作数一致     | 两个 int 数组之间进行右移计算            |
-| ARRAY_ADD_ARRAY_FLOAT   | v1.0     | 两个操作数一致     | 两个 float 数组之间进行加法计算          |
-| ARRAY_SUB_ARRAY_FLOAT   | v1.0     | 两个操作数一致     | 两个 float 数组之间进行减法计算          |
-| ARRAY_MUL_ARRAY_FLOAT   | v1.0     | 两个操作数一致     | 两个 float 数组之间进行乘法计算          |
-| ARRAY_DIV_ARRAY_FLOAT   | v1.0     | 两个操作数一致     | 两个 float 数组之间进行除法计算          |
-| ARRAY_LS_ARRAY_FLOAT    | v1.0     | 两个操作数一致     | 两个 float 数组之间进行左移计算          |
-| ARRAY_RS_ARRAY_FLOAT    | v1.0     | 两个操作数一致     | 两个 float 数组之间进行右移计算          |
-| ARRAY_ADD_ARRAY_DOUBLE  | v1.0     | 两个操作数一致     | 两个 double 数组之间进行加法计算         |
-| ARRAY_SUB_ARRAY_DOUBLE  | v1.0     | 两个操作数一致     | 两个 double 数组之间进行减法计算         |
-| ARRAY_MUL_ARRAY_DOUBLE  | v1.0     | 两个操作数一致     | 两个 double 数组之间进行乘法计算         |
-| ARRAY_DIV_ARRAY_DOUBLE  | v1.0     | 两个操作数一致     | 两个 double 数组之间进行除法计算         |
-| ARRAY_LS_ARRAY_DOUBLE   | v1.0     | 两个操作数一致     | 两个 double 数组之间进行左移计算         |
-| ARRAY_RS_ARRAY_DOUBLE   | v1.0     | 两个操作数一致     | 两个 double 数组之间进行右移计算         |
-| ARRAY_ADD_NUMBER_INT    | v1.0     | 第二个操作数为1个元素 | int 数组和 int数值 之间进行加法计算       |
-| ARRAY_SUB_NUMBER_INT    | v1.0     | 第二个操作数为1个元素 | int 数组和 int数值 之间进行加法计算       |
-| ARRAY_MUL_NUMBER_INT    | v1.0     | 第二个操作数为1个元素 | int 数组和 int数值 之间进行加法计算       |
-| ARRAY_DIV_NUMBER_INT    | v1.0     | 第二个操作数为1个元素 | int 数组和 int数值 之间进行加法计算       |
-| ARRAY_LS_NUMBER_INT     | v1.0     | 第二个操作数为1个元素 | int 数组和 int数值 之间进行加法计算       |
-| ARRAY_RS_NUMBER_INT     | v1.0     | 第二个操作数为1个元素 | int 数组和 int数值 之间进行加法计算       |
-| ARRAY_ADD_NUMBER_FLOAT  | v1.0     | 第二个操作数为1个元素 | float 数组和 float数值 之间进行加法计算   |
-| ARRAY_SUB_NUMBER_FLOAT  | v1.0     | 第二个操作数为1个元素 | float 数组和 float数值 之间进行加法计算   |
-| ARRAY_MUL_NUMBER_FLOAT  | v1.0     | 第二个操作数为1个元素 | float 数组和 float数值 之间进行加法计算   |
-| ARRAY_DIV_NUMBER_FLOAT  | v1.0     | 第二个操作数为1个元素 | float 数组和 float数值 之间进行加法计算   |
-| ARRAY_LS_NUMBER_FLOAT   | v1.0     | 第二个操作数为1个元素 | float 数组和 float数值 之间进行加法计算   |
-| ARRAY_RS_NUMBER_FLOAT   | v1.0     | 第二个操作数为1个元素 | float 数组和 float数值 之间进行加法计算   |
-| ARRAY_ADD_NUMBER_DOUBLE | v1.0     | 第二个操作数为1个元素 | double 数组和 double数值 之间进行加法计算 |
-| ARRAY_SUB_NUMBER_DOUBLE | v1.0     | 第二个操作数为1个元素 | double 数组和 double数值 之间进行加法计算 |
-| ARRAY_MUL_NUMBER_DOUBLE | v1.0     | 第二个操作数为1个元素 | double 数组和 double数值 之间进行加法计算 |
-| ARRAY_DIV_NUMBER_DOUBLE | v1.0     | 第二个操作数为1个元素 | double 数组和 double数值 之间进行加法计算 |
-| ARRAY_LS_NUMBER_DOUBLE  | v1.0     | 第二个操作数为1个元素 | double 数组和 double数值 之间进行加法计算 |
-| ARRAY_RS_NUMBER_DOUBLE  | v1.0     | 第二个操作数为1个元素 | double 数组和 double数值 之间进行加法计算 |
+| 计算模式名称                  | 计算模式支持版本 | 操作数长度规则      | 计算组件解释                       |
+|-------------------------|----------|--------------|------------------------------|
+| ARRAY_ADD_ARRAY_INT     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行加法计算            |
+| ARRAY_SUB_ARRAY_INT     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行减法计算            |
+| ARRAY_MUL_ARRAY_INT     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行乘法计算            |
+| ARRAY_DIV_ARRAY_INT     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行除法计算            |
+| ARRAY_LS_ARRAY_INT      | v1.0     | 两个操作数一致      | 两个 int 数组之间进行左移计算            |
+| ARRAY_RS_ARRAY_INT      | v1.0     | 两个操作数一致      | 两个 int 数组之间进行右移计算            |
+| ARRAY_ADD_ARRAY_FLOAT   | v1.0     | 两个操作数一致      | 两个 float 数组之间进行加法计算          |
+| ARRAY_SUB_ARRAY_FLOAT   | v1.0     | 两个操作数一致      | 两个 float 数组之间进行减法计算          |
+| ARRAY_MUL_ARRAY_FLOAT   | v1.0     | 两个操作数一致      | 两个 float 数组之间进行乘法计算          |
+| ARRAY_DIV_ARRAY_FLOAT   | v1.0     | 两个操作数一致      | 两个 float 数组之间进行除法计算          |
+| ARRAY_LS_ARRAY_FLOAT    | v1.0     | 两个操作数一致      | 两个 float 数组之间进行左移计算          |
+| ARRAY_RS_ARRAY_FLOAT    | v1.0     | 两个操作数一致      | 两个 float 数组之间进行右移计算          |
+| ARRAY_ADD_ARRAY_DOUBLE  | v1.0     | 两个操作数一致      | 两个 double 数组之间进行加法计算         |
+| ARRAY_SUB_ARRAY_DOUBLE  | v1.0     | 两个操作数一致      | 两个 double 数组之间进行减法计算         |
+| ARRAY_MUL_ARRAY_DOUBLE  | v1.0     | 两个操作数一致      | 两个 double 数组之间进行乘法计算         |
+| ARRAY_DIV_ARRAY_DOUBLE  | v1.0     | 两个操作数一致      | 两个 double 数组之间进行除法计算         |
+| ARRAY_LS_ARRAY_DOUBLE   | v1.0     | 两个操作数一致      | 两个 double 数组之间进行左移计算         |
+| ARRAY_RS_ARRAY_DOUBLE   | v1.0     | 两个操作数一致      | 两个 double 数组之间进行右移计算         |
+| ARRAY_ADD_NUMBER_INT    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
+| ARRAY_SUB_NUMBER_INT    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
+| ARRAY_MUL_NUMBER_INT    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
+| ARRAY_DIV_NUMBER_INT    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
+| ARRAY_LS_NUMBER_INT     | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
+| ARRAY_RS_NUMBER_INT     | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
+| ARRAY_ADD_NUMBER_FLOAT  | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
+| ARRAY_SUB_NUMBER_FLOAT  | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
+| ARRAY_MUL_NUMBER_FLOAT  | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
+| ARRAY_DIV_NUMBER_FLOAT  | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
+| ARRAY_LS_NUMBER_FLOAT   | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
+| ARRAY_RS_NUMBER_FLOAT   | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
+| ARRAY_ADD_NUMBER_DOUBLE | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
+| ARRAY_SUB_NUMBER_DOUBLE | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
+| ARRAY_MUL_NUMBER_DOUBLE | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
+| ARRAY_DIV_NUMBER_DOUBLE | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
+| ARRAY_LS_NUMBER_DOUBLE  | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
+| ARRAY_RS_NUMBER_DOUBLE  | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
+| ARRAY_POW2_NULL_INT     | v1.0.2   | 第二个操作数不需要有元素 | int 数组的所有元素进行 2幂运算           |
+| ARRAY_POW4_NULL_INT     | v1.0.2   | 第二个操作数不需要有元素 | int 数组的所有元素进行 4幂运算           |
+| ARRAY_POW6_NULL_INT     | v1.0.2   | 第二个操作数不需要有元素 | int 数组的所有元素进行 6幂运算           |
+| ARRAY_POW8_NULL_INT     | v1.0.2   | 第二个操作数不需要有元素 | int 数组的所有元素进行 8幂运算           |
 
 #### 数组与数组的计算模式
 
@@ -283,7 +287,7 @@ public class Main {
         // 准备两个数组
         final int[] srcArrayA = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37};
         final int[] srcArrayB = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200, 3300, 3400, 3500, 3600, 3700};
-        // 直接将两个数组进行求和计算 值得一提的是 我们没有准备结果数组的容器 而是直接在回调哈数中将其打印了出来
+        // 直接将两个数组进行求和计算 值得一提的是 我们没有准备结果数组的容器 而是直接在回调中将其打印了出来
         easilyOpenJCL.calculate(srcArrayA, srcArrayB, (result) -> {
             for (int i = 0; i < srcArrayA.length; i++) {
                 // 值得注意的是，在这里由于我们是直接操作的内存，一个 int 数值占4个字节，所以 i * 4 才可以获取到正确的结果 因为 每 4 个字节读取一次 正好读取到下一个数值
@@ -341,6 +345,10 @@ public class Main {
 ```
 
 ## 更新记录
+
+### 2024-07-11 1.0.2 版本开始开发
+
+- 新增了幂运算支持 最值比较支持
 
 ### 2024-07-10 1.0.1 版本发布
 

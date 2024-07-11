@@ -1,5 +1,11 @@
 package io.github.BeardedManZhao.easilyJopenCL.kernel;
 
+import org.jocl.Pointer;
+import org.jocl.Sizeof;
+import org.jocl.cl_kernel;
+
+import static org.jocl.CL.clSetKernelArg;
+
 /**
  * openCL 中计算操作的源码实现
  *
@@ -28,8 +34,6 @@ public class KernelSource {
     public static final KernelSource ARRAY_RS_ARRAY_DOUBLE = new KernelSource(args -> String.format("%s[%s] = %s[%s] >> %s[%s];", args[3], args[2], args[0], args[2], args[1], args[2]), "double", "ARRAY_RS_ARRAY_DOUBLE");
 
     /* 上面是 数组与数组之间的计算内核 下面是数组与数值之间的计算内核 */
-
-
     public static final KernelSource ARRAY_ADD_NUMBER_INT = new KernelSource(args -> String.format("%s[%s] = %s[%s] + %s[0];", args[3], args[2], args[0], args[2], args[1]), "int", "ARRAY_ADD_NUMBER_INT");
     public static final KernelSource ARRAY_SUB_NUMBER_INT = new KernelSource(args -> String.format("%s[%s] = %s[%s] - %s[0];", args[3], args[2], args[0], args[2], args[1]), "int", "ARRAY_SUB_NUMBER_INT");
     public static final KernelSource ARRAY_MUL_NUMBER_INT = new KernelSource(args -> String.format("%s[%s] = %s[%s] * %s[0];", args[3], args[2], args[0], args[2], args[1]), "int", "ARRAY_MUL_NUMBER_INT");
@@ -48,6 +52,28 @@ public class KernelSource {
     public static final KernelSource ARRAY_DIV_NUMBER_DOUBLE = new KernelSource(args -> String.format("%s[%s] = %s[%s] / %s[0];", args[3], args[2], args[0], args[2], args[1]), "double", "ARRAY_DIV_NUMBER_DOUBLE");
     public static final KernelSource ARRAY_LS_NUMBER_DOUBLE = new KernelSource(args -> String.format("%s[%s] = %s[%s] << %s[0];", args[3], args[2], args[0], args[2], args[1]), "double", "ARRAY_LS_NUMBER_DOUBLE");
     public static final KernelSource ARRAY_RS_NUMBER_DOUBLE = new KernelSource(args -> String.format("%s[%s] = %s[%s] >> %s[0];", args[3], args[2], args[0], args[2], args[1]), "double", "ARRAY_RS_NUMBER_DOUBLE");
+
+    /* 下面是幂运算 */
+
+    public static final KernelSource ARRAY_POW2_NULL_INT = new KernelSource(args -> String.format("int n = %s[%s]; %s[%s] = n * n;", args[0], args[2], args[3], args[2]), "int", "ARRAY_POW2_NULL_INT");
+    public static final KernelSource ARRAY_POW4_NULL_INT = new KernelSource(args -> String.format("int n = %s[%s]; %s[%s] = n * n * n * n;", args[0], args[2], args[3], args[2]), "int", "ARRAY_POW4_NULL_INT");
+    public static final KernelSource ARRAY_POW6_NULL_INT = new KernelSource(args -> String.format("int n = %s[%s]; %s[%s] = n * n * n * n * n * n;", args[0], args[2], args[3], args[2]), "int", "ARRAY_POW6_NULL_INT");
+    public static final KernelSource ARRAY_POW8_NULL_INT = new KernelSource(args -> String.format("int n = %s[%s]; %s[%s] = n * n * n * n * n * n * n * n;", args[0], args[2], args[3], args[2]), "int", "ARRAY_POW8_NULL_INT");
+    public static final KernelSource ARRAY_POW2_NULL_FLOAT = new KernelSource(args -> String.format("float n = %s[%s]; %s[%s] = n * n;", args[0], args[2], args[3], args[2]), "float", "ARRAY_POW2_NULL_INT");
+    public static final KernelSource ARRAY_POW4_NULL_FLOAT = new KernelSource(args -> String.format("float n = %s[%s]; %s[%s] = n * n * n * n;", args[0], args[2], args[3], args[2]), "float", "ARRAY_POW4_NULL_INT");
+    public static final KernelSource ARRAY_POW6_NULL_FLOAT = new KernelSource(args -> String.format("float n = %s[%s]; %s[%s] = n * n * n * n * n * n;", args[0], args[2], args[3], args[2]), "float", "ARRAY_POW6_NULL_INT");
+    public static final KernelSource ARRAY_POW8_NULL_FLOAT = new KernelSource(args -> String.format("float n = %s[%s]; %s[%s] = n * n * n * n * n * n * n * n;", args[0], args[2], args[3], args[2]), "int", "ARRAY_POW8_NULL_INT");
+    public static final KernelSource ARRAY_POW2_NULL_DOUBLE = new KernelSource(args -> String.format("double n = %s[%s]; %s[%s] = n * n;", args[0], args[2], args[3], args[2]), "double", "ARRAY_POW2_NULL_DOUBLE");
+    public static final KernelSource ARRAY_POW4_NULL_DOUBLE = new KernelSource(args -> String.format("double n = %s[%s]; %s[%s] = n * n * n * n;", args[0], args[2], args[3], args[2]), "double", "ARRAY_POW4_NULL_DOUBLE");
+    public static final KernelSource ARRAY_POW6_NULL_DOUBLE = new KernelSource(args -> String.format("double n = %s[%s]; %s[%s] = n * n * n * n * n * n;", args[0], args[2], args[3], args[2]), "double", "ARRAY_POW6_NULL_DOUBLE");
+    public static final KernelSource ARRAY_POW8_NULL_DOUBLE = new KernelSource(args -> String.format("double n = %s[%s]; %s[%s] = n * n * n * n * n * n * n * n;", args[0], args[2], args[3], args[2]), "double", "ARRAY_POW8_NULL_DOUBLE");
+
+    public static final KernelSource ARRAY_MAX_ARRAY_INT = new KernelSource(args -> String.format("%s[%s] = max(%s[%s], %s[%s]);", args[3], args[2], args[0], args[2], args[1], args[2]), "int", "ARRAY_MAX_ARRAY_INT");
+    public static final KernelSource ARRAY_MAX_ARRAY_FLOAT = new KernelSource(args -> String.format("%s[%s] = max(%s[%s], %s[%s]);", args[3], args[2], args[0], args[2], args[1], args[2]), "float", "ARRAY_MAX_ARRAY_FLOAT");
+    public static final KernelSource ARRAY_MAX_ARRAY_DOUBLE = new KernelSource(args -> String.format("%s[%s] = max(%s[%s], %s[%s]);", args[3], args[2], args[0], args[2], args[1], args[2]), "double", "ARRAY_MAX_ARRAY_DOUBLE");
+    public static final KernelSource ARRAY_MIN_ARRAY_INT = new KernelSource(args -> String.format("%s[%s] = min(%s[%s], %s[%s]);", args[3], args[2], args[0], args[2], args[1], args[2]), "int", "ARRAY_MIN_ARRAY_INT");
+    public static final KernelSource ARRAY_MIN_ARRAY_FLOAT = new KernelSource(args -> String.format("%s[%s] = min(%s[%s], %s[%s]);", args[3], args[2], args[0], args[2], args[1], args[2]), "float", "ARRAY_MIN_ARRAY_FLOAT");
+    public static final KernelSource ARRAY_MIN_ARRAY_DOUBLE = new KernelSource(args -> String.format("%s[%s] = min(%s[%s], %s[%s]);", args[3], args[2], args[0], args[2], args[1], args[2]), "double", "ARRAY_MIN_ARRAY_DOUBLE");
 
     private final KernelFunction kernelFunction;
     private final String type, name;
@@ -88,7 +114,8 @@ public class KernelSource {
      * @return 计算源码
      */
     public static String getKernelSource(String type1, String kName, KernelFunction kernelFunction) {
-        return "__kernel void " + kName + "(__global const " + type1 + " *a,\n" +
+        return
+                "__kernel void " + kName + "(__global const " + type1 + " *a,\n" +
                 "             __global const " + type1 + " *b,\n" +
                 "             __global " + type1 + " *c)\n" +
                 "{\n" +
@@ -114,6 +141,13 @@ public class KernelSource {
      */
     public int work_dim_algorithm(long[] global_work_size) {
         return global_work_size.length;
+    }
+
+    public void setKernelParam(cl_kernel clKernel, Pointer p1, Pointer p2, Pointer p3) {
+        int argIndex = 0;
+        clSetKernelArg(clKernel, argIndex++, Sizeof.cl_mem, p1);
+        clSetKernelArg(clKernel, argIndex++, Sizeof.cl_mem, p2);
+        clSetKernelArg(clKernel, argIndex, Sizeof.cl_mem, p3);
     }
 
     @Override

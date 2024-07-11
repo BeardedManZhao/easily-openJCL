@@ -317,10 +317,7 @@ public class EasilyOpenJCL {
                                             int sizeOf, long[] global_work_size, KernelSource kernelName,
                                             Consumer<ByteBuffer> resultFunc) {
         // 设置内核参数
-        int argIndex = 0;
-        clSetKernelArg(clKernel, argIndex++, Sizeof.cl_mem, Pointer.to(srcMemA));
-        clSetKernelArg(clKernel, argIndex++, Sizeof.cl_mem, Pointer.to(srcMemB));
-        clSetKernelArg(clKernel, argIndex, Sizeof.cl_mem, Pointer.to(dstMem));
+        kernelName.setKernelParam(clKernel, Pointer.to(srcMemA), Pointer.to(srcMemB), Pointer.to(dstMem));
 
         // 执行内核并获取事件
         cl_event kernelEvent = new cl_event();
