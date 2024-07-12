@@ -19,7 +19,7 @@ easily-openJCL 是一个轻量级的 Java 语言下的 GPU 显卡 计算库，�
     <dependency>
         <groupId>io.github.BeardedManZhao</groupId>
         <artifactId>easily-openJCL</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </dependency>
 </dependencies>
 ```
@@ -75,48 +75,65 @@ public class Main {
 
 我们提供了一些常见的内置计算模式，我们可以通过这些模式实现有效的数据计算操作，接下来的表格中详细介绍了不同的计算模式信息！
 
-| 计算模式名称                  | 计算模式支持版本 | 操作数长度规则      | 计算组件解释                       |
-|-------------------------|----------|--------------|------------------------------|
-| ARRAY_ADD_ARRAY_INT     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行加法计算            |
-| ARRAY_SUB_ARRAY_INT     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行减法计算            |
-| ARRAY_MUL_ARRAY_INT     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行乘法计算            |
-| ARRAY_DIV_ARRAY_INT     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行除法计算            |
-| ARRAY_LS_ARRAY_INT      | v1.0     | 两个操作数一致      | 两个 int 数组之间进行左移计算            |
-| ARRAY_RS_ARRAY_INT      | v1.0     | 两个操作数一致      | 两个 int 数组之间进行右移计算            |
-| ARRAY_ADD_ARRAY_FLOAT   | v1.0     | 两个操作数一致      | 两个 float 数组之间进行加法计算          |
-| ARRAY_SUB_ARRAY_FLOAT   | v1.0     | 两个操作数一致      | 两个 float 数组之间进行减法计算          |
-| ARRAY_MUL_ARRAY_FLOAT   | v1.0     | 两个操作数一致      | 两个 float 数组之间进行乘法计算          |
-| ARRAY_DIV_ARRAY_FLOAT   | v1.0     | 两个操作数一致      | 两个 float 数组之间进行除法计算          |
-| ARRAY_LS_ARRAY_FLOAT    | v1.0     | 两个操作数一致      | 两个 float 数组之间进行左移计算          |
-| ARRAY_RS_ARRAY_FLOAT    | v1.0     | 两个操作数一致      | 两个 float 数组之间进行右移计算          |
-| ARRAY_ADD_ARRAY_DOUBLE  | v1.0     | 两个操作数一致      | 两个 double 数组之间进行加法计算         |
-| ARRAY_SUB_ARRAY_DOUBLE  | v1.0     | 两个操作数一致      | 两个 double 数组之间进行减法计算         |
-| ARRAY_MUL_ARRAY_DOUBLE  | v1.0     | 两个操作数一致      | 两个 double 数组之间进行乘法计算         |
-| ARRAY_DIV_ARRAY_DOUBLE  | v1.0     | 两个操作数一致      | 两个 double 数组之间进行除法计算         |
-| ARRAY_LS_ARRAY_DOUBLE   | v1.0     | 两个操作数一致      | 两个 double 数组之间进行左移计算         |
-| ARRAY_RS_ARRAY_DOUBLE   | v1.0     | 两个操作数一致      | 两个 double 数组之间进行右移计算         |
-| ARRAY_ADD_NUMBER_INT    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
-| ARRAY_SUB_NUMBER_INT    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
-| ARRAY_MUL_NUMBER_INT    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
-| ARRAY_DIV_NUMBER_INT    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
-| ARRAY_LS_NUMBER_INT     | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
-| ARRAY_RS_NUMBER_INT     | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
-| ARRAY_ADD_NUMBER_FLOAT  | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
-| ARRAY_SUB_NUMBER_FLOAT  | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
-| ARRAY_MUL_NUMBER_FLOAT  | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
-| ARRAY_DIV_NUMBER_FLOAT  | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
-| ARRAY_LS_NUMBER_FLOAT   | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
-| ARRAY_RS_NUMBER_FLOAT   | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
-| ARRAY_ADD_NUMBER_DOUBLE | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
-| ARRAY_SUB_NUMBER_DOUBLE | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
-| ARRAY_MUL_NUMBER_DOUBLE | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
-| ARRAY_DIV_NUMBER_DOUBLE | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
-| ARRAY_LS_NUMBER_DOUBLE  | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
-| ARRAY_RS_NUMBER_DOUBLE  | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
-| ARRAY_POW2_NULL_INT     | v1.0.2   | 第二个操作数不需要有元素 | int 数组的所有元素进行 2幂运算           |
-| ARRAY_POW4_NULL_INT     | v1.0.2   | 第二个操作数不需要有元素 | int 数组的所有元素进行 4幂运算           |
-| ARRAY_POW6_NULL_INT     | v1.0.2   | 第二个操作数不需要有元素 | int 数组的所有元素进行 6幂运算           |
-| ARRAY_POW8_NULL_INT     | v1.0.2   | 第二个操作数不需要有元素 | int 数组的所有元素进行 8幂运算           |
+| 计算模式名称                                               | 计算模式支持版本 | 操作数长度规则      | 计算组件解释                       |
+|------------------------------------------------------|----------|--------------|------------------------------|
+| KernelSource.ARRAY_ADD_ARRAY_INT                     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行加法计算            |
+| KernelSource.ARRAY_SUB_ARRAY_INT                     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行减法计算            |
+| KernelSource.ARRAY_MUL_ARRAY_INT                     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行乘法计算            |
+| KernelSource.ARRAY_DIV_ARRAY_INT                     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行除法计算            |
+| KernelSource.ARRAY_LS_ARRAY_INT                      | v1.0     | 两个操作数一致      | 两个 int 数组之间进行左移计算            |
+| KernelSource.ARRAY_RS_ARRAY_INT                      | v1.0     | 两个操作数一致      | 两个 int 数组之间进行右移计算            |
+| KernelSource.ARRAY_ADD_ARRAY_FLOAT                   | v1.0     | 两个操作数一致      | 两个 float 数组之间进行加法计算          |
+| KernelSource.ARRAY_SUB_ARRAY_FLOAT                   | v1.0     | 两个操作数一致      | 两个 float 数组之间进行减法计算          |
+| KernelSource.ARRAY_MUL_ARRAY_FLOAT                   | v1.0     | 两个操作数一致      | 两个 float 数组之间进行乘法计算          |
+| KernelSource.ARRAY_DIV_ARRAY_FLOAT                   | v1.0     | 两个操作数一致      | 两个 float 数组之间进行除法计算          |
+| KernelSource.ARRAY_LS_ARRAY_FLOAT                    | v1.0     | 两个操作数一致      | 两个 float 数组之间进行左移计算          |
+| KernelSource.ARRAY_RS_ARRAY_FLOAT                    | v1.0     | 两个操作数一致      | 两个 float 数组之间进行右移计算          |
+| KernelSource.ARRAY_ADD_ARRAY_DOUBLE                  | v1.0     | 两个操作数一致      | 两个 double 数组之间进行加法计算         |
+| KernelSource.ARRAY_SUB_ARRAY_DOUBLE                  | v1.0     | 两个操作数一致      | 两个 double 数组之间进行减法计算         |
+| KernelSource.ARRAY_MUL_ARRAY_DOUBLE                  | v1.0     | 两个操作数一致      | 两个 double 数组之间进行乘法计算         |
+| KernelSource.ARRAY_DIV_ARRAY_DOUBLE                  | v1.0     | 两个操作数一致      | 两个 double 数组之间进行除法计算         |
+| KernelSource.ARRAY_LS_ARRAY_DOUBLE                   | v1.0     | 两个操作数一致      | 两个 double 数组之间进行左移计算         |
+| KernelSource.ARRAY_RS_ARRAY_DOUBLE                   | v1.0     | 两个操作数一致      | 两个 double 数组之间进行右移计算         |
+| KernelSource.ARRAY_ADD_NUMBER_INT                    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
+| KernelSource.ARRAY_SUB_NUMBER_INT                    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
+| KernelSource.ARRAY_MUL_NUMBER_INT                    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
+| KernelSource.ARRAY_DIV_NUMBER_INT                    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
+| KernelSource.ARRAY_LS_NUMBER_INT                     | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
+| KernelSource.ARRAY_RS_NUMBER_INT                     | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
+| KernelSource.ARRAY_ADD_NUMBER_FLOAT                  | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
+| KernelSource.ARRAY_SUB_NUMBER_FLOAT                  | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
+| KernelSource.ARRAY_MUL_NUMBER_FLOAT                  | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
+| KernelSource.ARRAY_DIV_NUMBER_FLOAT                  | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
+| KernelSource.ARRAY_LS_NUMBER_FLOAT                   | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
+| KernelSource.ARRAY_RS_NUMBER_FLOAT                   | v1.0     | 第二个操作数为1个元素  | float 数组和 float数值 之间进行加法计算   |
+| KernelSource.ARRAY_ADD_NUMBER_DOUBLE                 | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
+| KernelSource.ARRAY_SUB_NUMBER_DOUBLE                 | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
+| KernelSource.ARRAY_MUL_NUMBER_DOUBLE                 | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
+| KernelSource.ARRAY_DIV_NUMBER_DOUBLE                 | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
+| KernelSource.ARRAY_LS_NUMBER_DOUBLE                  | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
+| KernelSource.ARRAY_RS_NUMBER_DOUBLE                  | v1.0     | 第二个操作数为1个元素  | double 数组和 double数值 之间进行加法计算 |
+| KernelSource.ARRAY_POW2_NULL_INT                     | v1.0.2   | 第二个操作数不需要有元素 | int 数组的所有元素进行 2幂运算           |
+| KernelSource.ARRAY_POW4_NULL_INT                     | v1.0.2   | 第二个操作数不需要有元素 | int 数组的所有元素进行 4幂运算           |
+| KernelSource.ARRAY_POW6_NULL_INT                     | v1.0.2   | 第二个操作数不需要有元素 | int 数组的所有元素进行 6幂运算           |
+| KernelSource.ARRAY_POW8_NULL_INT                     | v1.0.2   | 第二个操作数不需要有元素 | int 数组的所有元素进行 8幂运算           |
+| KernelSource.ARRAY_POW2_NULL_FLOAT                   | v1.0.2   | 第二个操作数不需要有元素 | float 数组的所有元素进行 2幂运算         |
+| KernelSource.ARRAY_POW4_NULL_FLOAT                   | v1.0.2   | 第二个操作数不需要有元素 | float 数组的所有元素进行 4幂运算         |
+| KernelSource.ARRAY_POW6_NULL_FLOAT                   | v1.0.2   | 第二个操作数不需要有元素 | float 数组的所有元素进行 6幂运算         |
+| KernelSource.ARRAY_POW8_NULL_FLOAT                   | v1.0.2   | 第二个操作数不需要有元素 | float 数组的所有元素进行 8幂运算         |
+| KernelSource.ARRAY_POW2_NULL_DOUBLE                  | v1.0.2   | 第二个操作数不需要有元素 | double 数组的所有元素进行 2幂运算        |
+| KernelSource.ARRAY_POW4_NULL_DOUBLE                  | v1.0.2   | 第二个操作数不需要有元素 | double 数组的所有元素进行 4幂运算        |
+| KernelSource.ARRAY_POW6_NULL_DOUBLE                  | v1.0.2   | 第二个操作数不需要有元素 | double 数组的所有元素进行 6幂运算        |
+| KernelSource.ARRAY_POW8_NULL_DOUBLE                  | v1.0.2   | 第二个操作数不需要有元素 | double 数组的所有元素进行 8幂运算        |
+| KernelSource.ARRAY_MAX_ARRAY_INT                     | v1.0.2   | 两个操作数一致      | 两个 int 数组的所有元素进行最大值提取        |
+| KernelSource.ARRAY_MAX_ARRAY_FLOAT                   | v1.0.2   | 两个操作数一致      | 两个 float 数组的所有元素进行最大值提取      |
+| KernelSource.ARRAY_MAX_ARRAY_DOUBLE                  | v1.0.2   | 两个操作数一致      | 两个 double 数组的所有元素进行最大值提取     |
+| KernelSource.ARRAY_MIN_ARRAY_INT                     | v1.0.2   | 两个操作数一致      | 两个 int 数组的所有元素进行最小值提取        |
+| KernelSource.ARRAY_MIN_ARRAY_FLOAT                   | v1.0.2   | 两个操作数一致      | 两个 float 数组的所有元素进行最小值提取      |
+| KernelSource.ARRAY_MIN_ARRAY_DOUBLE                  | v1.0.2   | 两个操作数一致      | 两个 double 数组的所有元素进行最小值提取     |
+| LengthKernelSource.ARRAY_KRONECKER_PRODUCT_ARRAY_INT | v1.0.2   | 两个操作数长度的乘积   | 两个 int 数组的所有元素的克罗内克乘积        |
+| LengthKernelSource.ARRAY_KRONECKER_PRODUCT_ARRAY_INT | v1.0.2   | 两个操作数长度的乘积   | 两个 float 数组的所有元素的克罗内克乘积      |
+| LengthKernelSource.ARRAY_KRONECKER_PRODUCT_ARRAY_INT | v1.0.2   | 两个操作数长度的乘积   | 两个 double 数组的所有元素的克罗内克乘积     |
 
 #### 数组与数组的计算模式
 
@@ -272,6 +289,8 @@ public class Main {
 
 ### 灵活的API
 
+### 基本计算示例
+
 我们在计算模式章节中，演示的都是将结果存储到已经存在的数组中，实际上，您可以不去将结果存储到已经存在的数组中，而是通过回调函数直接调用内存映射过来的
 byteBuffer，下面是一个示例！
 
@@ -298,6 +317,144 @@ public class Main {
 }
 ```
 
+### 内存复用计算示例
+
+当我们进行计算的时候，内部会进行一个内存映射的操作，这个操作是有开销的，每次计算都需要一次映射，这是很大的开销，因此很有必要复用内存，下面是一个示例！
+
+```java
+import io.github.BeardedManZhao.easilyJopenCL.EasilyOpenJCL;
+import io.github.BeardedManZhao.easilyJopenCL.MemSpace;
+import io.github.BeardedManZhao.easilyJopenCL.kernel.KernelSource;
+import io.github.BeardedManZhao.easilyJopenCL.kernel.LengthKernelSource;
+import org.jocl.Pointer;
+import org.jocl.Sizeof;
+
+public class Main {
+
+    static final EasilyOpenJCL easilyOpenJCL = EasilyOpenJCL.initOpenCLEnvironment(
+            LengthKernelSource.ARRAY_KRONECKER_PRODUCT_ARRAY_INT,
+            KernelSource.ARRAY_ADD_NUMBER_INT
+    );
+    // 准备两个数组
+    static final int[] srcArrayA = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
+    static final int[] srcArrayB = {2, 9, 8};
+
+    public static void main(String[] args0) {
+        final int i = srcArrayA.length * srcArrayB.length;
+        // 构造内存空间 并在这里指定要使用的计算内核
+        final MemSpace memSpace = easilyOpenJCL.createMemSpace(
+                // 这里是两个操作数的指针
+                Pointer.to(srcArrayA), Pointer.to(srcArrayB),
+                // 这里是两个操作数的长度 以及结果的长度（如果需要复用，则这里需要使用最大空间，为了避免申请的内存空间不够导致无法进行计算）
+                srcArrayA.length, srcArrayB.length, i,
+                // 这里第一个参数是操作数中元素的字节尺寸
+                // 第二个是本内存空间要使用的计算模式（后期可改）
+                Sizeof.cl_int, LengthKernelSource.ARRAY_KRONECKER_PRODUCT_ARRAY_INT
+        );
+
+        // 开始计算 第一个参数是结果的长度，第二个参数是内存空间对象
+        f(i, memSpace);
+
+        // 如果我们期望复用这个内存空间，那么我们不需要释放它 继续切换计算模式即可 这样就实现了复用的效果 避免了内存拷贝的开销
+        memSpace.setKernelSource(KernelSource.ARRAY_ADD_NUMBER_INT);
+        System.out.println("\n已切换计算模式为 " + memSpace.getKernelSource());
+
+        // 再次计算 （由于这次我们使用的是 add 计算 数组长度不是 srcArrayA.length * srcArrayB.length 是 srcArrayA.length）
+        f(srcArrayA.length, memSpace);
+
+        // 最后释放
+        memSpace.releaseResources();
+        easilyOpenJCL.releaseResources();
+    }
+
+    public static void f(int len, MemSpace memSpace) {
+        easilyOpenJCL.calculate(byteBuffer -> {
+            for (int i = 0; i < len; i++) {
+                System.out.print(byteBuffer.getInt(i * 4) + " ");
+            }
+        }, memSpace, false);
+    }
+}
+
+```
+
+### 内存空间合并计算
+
+我们意识到 内存空间对象存储了操作数，可以修改计算模式复用内存空间，但是，如果我们期望修改操作数呢？
+
+我们在内存空间对象中，提供了一个 `merge`
+的函数，这个函数可以有效的将一个内存空间和一个数组进行合并操作，这个操作中会将内存进行引用复制，不会有拷贝，这样我们可以使用合并的新的内存空间进行计算，就实现了内存复用！
+
+值得注意的是，我们合并之后和之前的内存空间一定会有共用的内存空间，因此若使用到这两个内存空间对象其中之一，则两个都不可以释放，因此，我们建议您使用合并后的内存空间进行计算，然后释放合并前的内存空间即可！
+
+下面是一个操作示例！
+
+```java
+import io.github.BeardedManZhao.easilyJopenCL.EasilyOpenJCL;
+import io.github.BeardedManZhao.easilyJopenCL.MemSpace;
+import io.github.BeardedManZhao.easilyJopenCL.kernel.KernelSource;
+import io.github.BeardedManZhao.easilyJopenCL.kernel.LengthKernelSource;
+import org.jocl.Pointer;
+import org.jocl.Sizeof;
+
+public class Main {
+
+    static final EasilyOpenJCL easilyOpenJCL = EasilyOpenJCL.initOpenCLEnvironment(
+            LengthKernelSource.ARRAY_KRONECKER_PRODUCT_ARRAY_INT,
+            KernelSource.ARRAY_ADD_NUMBER_INT
+    );
+    // 准备两个数组
+    static final int[] srcArrayA = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
+    static final int[] srcArrayB = {2, 9, 8};
+
+    public static void main(String[] args0) {
+        final int i = srcArrayA.length * srcArrayB.length;
+        final MemSpace memSpace = easilyOpenJCL.createMemSpace(
+                Pointer.to(srcArrayA), Pointer.to(srcArrayB),
+                srcArrayA.length, srcArrayB.length, i,
+                Sizeof.cl_int, LengthKernelSource.ARRAY_KRONECKER_PRODUCT_ARRAY_INT
+        );
+
+        // 开始计算 第一个参数是结果的长度，第二个参数是内存空间对象
+        f(i, memSpace);
+
+        // 如果我们期望复用这个内存空间，但其中 srcArrayB 需要被修改 则可以使用合并的方式获取到一个新的内存空间
+        final MemSpace merge = memSpace.merge(
+                // 在这里我们将第一个参数设置为 null 则代表 第一个操作数使用 memSpace 中的数据
+                // 第二个参数是 srcArrayB 我们在这里进行了设置 第二个操作数使用我们提供的
+                null, Pointer.to(new int[]{2, 4, 6}),
+                // 第三个参数是 第一个操作数的长度
+                // 第四个参数是 第二个操作数的长度
+                // 第五个参数是 结果的长度
+                -1, 3, srcArrayA.length * 3
+        );
+
+        System.out.println("\n合并之后");
+
+        // 再次计算 (这次我们使用 merge 即可！)
+        f(i, merge);
+
+        // 最后释放 merge 即可，merge 会链式的将 memSpace 的资源释放掉
+        merge.releaseResources();
+
+        // 查看是否释放完毕
+        System.out.println("\n释放之后");
+        System.out.println(merge.isNotRelease());
+        System.out.println(memSpace.isNotRelease());
+
+        easilyOpenJCL.releaseResources();
+    }
+
+    public static void f(int len, MemSpace memSpace) {
+        easilyOpenJCL.calculate(byteBuffer -> {
+            for (int i = 0; i < len; i++) {
+                System.out.print(byteBuffer.getInt(i * 4) + " ");
+            }
+        }, memSpace, false);
+    }
+}
+```
+
 ## 测试案例
 
 ### 基准测试
@@ -306,6 +463,10 @@ public class Main {
 > 的运算量足够小的时候，GPU 的运算速度会远低于 CPU 的运算速度。在不同电脑上，运算速度也会有差异，您可以尝试修改下面的数学表达式，来增大或减小
 > CPU 和 GPU 的计算量！
 > 但不论如何，您增加数学表达式的复杂度的时候，CPU的运算速度会增加，然而GPU的运算速度几乎不会增加，这是因为 GPU 的并行计算。
+
+#### 使用数组运算
+
+这样的操作会涉及到一些数据拷贝开销！
 
 ```java
 import io.github.BeardedManZhao.easilyJopenCL.EasilyOpenJCL;
@@ -344,11 +505,105 @@ public class Main {
 }
 ```
 
+#### 只有结果使用内存空间 操作数使用数组
+
+从显存到物理内存之间几乎不存在数据拷贝，其效率比上面的要高!
+
+```java
+import io.github.BeardedManZhao.easilyJopenCL.EasilyOpenJCL;
+import io.github.BeardedManZhao.easilyJopenCL.kernel.KernelSource;
+
+public class Main {
+    public static void main(String[] args0) {
+        // 这个地方的数学表达式 以及下面 for 循环中的 数学表达式 都是相同的，只是为了测试GPU 和 CPU 的计算差异，这个表达式越复杂 计算量就会越大，但数据拷贝量不会有变化，这可能会让 CPU 处于劣势
+        final KernelSource kernelSource = new KernelSource(args -> "c[gid] = ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (1024 * a[gid]))))) - ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (1024 * a[gid]))))) + 1;", "double", "MY");
+        final EasilyOpenJCL easilyOpenJCL = EasilyOpenJCL.initOpenCLEnvironment(
+                kernelSource
+        );
+        // 这个数组的长度代表的是操作数的数据量 这个数值越大 计算量会成倍增大，同时数据拷贝量也会成倍增加，这将会让 GPU 计算处于劣势
+        final double[] a = new double[Integer.MAX_VALUE >> 7];
+        for (int i = 0; i < a.length; i++) {
+            a[i] = i + 10;
+        }
+        final double[] b = {2};
+        final double[] c = new double[a.length];
+
+        // 热身
+        easilyOpenJCL.calculate(a, b, c, kernelSource);
+
+        // 正式计算
+        final long l = System.currentTimeMillis();
+        easilyOpenJCL.calculate(a, b, byteBuffer -> {
+            final long l1 = System.currentTimeMillis();
+            System.out.println("GPU计算耗时：" + (l1 - l) + " 第一个元素结果 = " + c[0]);
+        }, c.length, kernelSource);
+
+        final long l1 = System.currentTimeMillis();
+        for (int gid = 0; gid < a.length; gid++) {
+            c[gid] = ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (1024 * a[gid]))))) - ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (1024 * a[gid]))))) + 1;
+        }
+        final long l2 = System.currentTimeMillis();
+        System.out.println("CPU计算耗时：" + (l2 - l1) + " 第一个元素结果 = " + c[0]);
+    }
+}
+```
+
+#### 所有操作数均使用内存空间直接运算
+
+这样的操作的效率会比上面更高，因为这里的操作数部分，从物理内存到显存之间的拷贝也几乎消失。
+
+```java
+import io.github.BeardedManZhao.easilyJopenCL.EasilyOpenJCL;
+import io.github.BeardedManZhao.easilyJopenCL.MemSpace;
+import io.github.BeardedManZhao.easilyJopenCL.kernel.KernelSource;
+import org.jocl.Pointer;
+import org.jocl.Sizeof;
+
+public class Main {
+    public static void main(String[] args0) {
+        // 这个地方的数学表达式 以及下面 for 循环中的 数学表达式 都是相同的，只是为了测试GPU 和 CPU 的计算差异，这个表达式越复杂 计算量就会越大，但数据拷贝量不会有变化，这可能会让 CPU 处于劣势
+        final KernelSource kernelSource = new KernelSource(args -> "c[gid] = ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (1024 * a[gid]))))) - ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (1024 * a[gid]))))) + 1;", "double", "MY");
+        final EasilyOpenJCL easilyOpenJCL = EasilyOpenJCL.initOpenCLEnvironment(
+                kernelSource
+        );
+        // 这个数组的长度代表的是操作数的数据量 这个数值越大 计算量会成倍增大，同时数据拷贝量也会成倍增加，这将会让 GPU 计算处于劣势
+        final double[] a = new double[Integer.MAX_VALUE >> 6];
+        for (int i = 0; i < a.length; i++) {
+            a[i] = i + 10;
+        }
+        final double[] b = {2};
+        final double[] c = new double[a.length];
+        // 获取到内存空间
+        final MemSpace memSpace = easilyOpenJCL.createMemSpace(Pointer.to(a), Pointer.to(b), a.length, b.length, c.length, Sizeof.cl_double, kernelSource);
+
+        // 热身
+        easilyOpenJCL.calculate(a, b, c, kernelSource);
+
+        // 正式计算
+        final long l = System.currentTimeMillis();
+        easilyOpenJCL.calculate(byteBuffer -> {
+            final long l1 = System.currentTimeMillis();
+            System.out.println("GPU计算耗时：" + (l1 - l) + " 第一个元素结果 = " + byteBuffer.getDouble(0));
+        }, memSpace, true);
+
+
+        final long l1 = System.currentTimeMillis();
+        for (int gid = 0; gid < a.length; gid++) {
+            c[gid] = ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (1024 * a[gid]))))) - ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) + ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - 1024)))) * ((a[gid] / b[0] * a[0] + (a[gid] / 100 * 33 + 210.5 / 5)) * 2) * 2 / 3 + (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (a[gid] * a[gid] - (1024 * a[gid]))))) + 1;
+        }
+        final long l2 = System.currentTimeMillis();
+        System.out.println("CPU计算耗时：" + (l2 - l1) + " 第一个元素结果 = " + c[0]);
+    }
+}
+```
+
 ## 更新记录
 
 ### 2024-07-11 1.0.2 版本开始开发
 
-- 新增了幂运算支持 最值比较支持
+- 新增了幂运算支持 最值比较支持 克罗内克积 计算支持
+- 对于计算操作时 结果指针的内存进行优化 对计算过程的性能进行优化
+- 新增了内存空间对象 `MemSpace` 的支持
 
 ### 2024-07-10 1.0.1 版本发布
 

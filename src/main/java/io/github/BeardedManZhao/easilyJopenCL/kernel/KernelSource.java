@@ -68,21 +68,29 @@ public class KernelSource {
     public static final KernelSource ARRAY_POW6_NULL_DOUBLE = new KernelSource(args -> String.format("double n = %s[%s]; %s[%s] = n * n * n * n * n * n;", args[0], args[2], args[3], args[2]), "double", "ARRAY_POW6_NULL_DOUBLE");
     public static final KernelSource ARRAY_POW8_NULL_DOUBLE = new KernelSource(args -> String.format("double n = %s[%s]; %s[%s] = n * n * n * n * n * n * n * n;", args[0], args[2], args[3], args[2]), "double", "ARRAY_POW8_NULL_DOUBLE");
 
+    /* 下面是最值运算 */
+
     public static final KernelSource ARRAY_MAX_ARRAY_INT = new KernelSource(args -> String.format("%s[%s] = max(%s[%s], %s[%s]);", args[3], args[2], args[0], args[2], args[1], args[2]), "int", "ARRAY_MAX_ARRAY_INT");
     public static final KernelSource ARRAY_MAX_ARRAY_FLOAT = new KernelSource(args -> String.format("%s[%s] = max(%s[%s], %s[%s]);", args[3], args[2], args[0], args[2], args[1], args[2]), "float", "ARRAY_MAX_ARRAY_FLOAT");
     public static final KernelSource ARRAY_MAX_ARRAY_DOUBLE = new KernelSource(args -> String.format("%s[%s] = max(%s[%s], %s[%s]);", args[3], args[2], args[0], args[2], args[1], args[2]), "double", "ARRAY_MAX_ARRAY_DOUBLE");
     public static final KernelSource ARRAY_MIN_ARRAY_INT = new KernelSource(args -> String.format("%s[%s] = min(%s[%s], %s[%s]);", args[3], args[2], args[0], args[2], args[1], args[2]), "int", "ARRAY_MIN_ARRAY_INT");
     public static final KernelSource ARRAY_MIN_ARRAY_FLOAT = new KernelSource(args -> String.format("%s[%s] = min(%s[%s], %s[%s]);", args[3], args[2], args[0], args[2], args[1], args[2]), "float", "ARRAY_MIN_ARRAY_FLOAT");
     public static final KernelSource ARRAY_MIN_ARRAY_DOUBLE = new KernelSource(args -> String.format("%s[%s] = min(%s[%s], %s[%s]);", args[3], args[2], args[0], args[2], args[1], args[2]), "double", "ARRAY_MIN_ARRAY_DOUBLE");
-
-    private final KernelFunction kernelFunction;
+    protected final KernelFunction kernelFunction;
     private final String type, name;
 
     /**
      * 对于一个内核计算源码的构造函数
      *
      * @param kernelFunction 内核的计算源码实现函数对象。
-     *                       参数说明：参数1=数组1的引用对象  参数2=数组2的引用对象  参数3=当前计算操作位于的索引  参数4=结果数组的引用对象
+     *                       参数说明：
+     *                          参数1（a）=数组1的引用对象
+     *                          参数2（b）=数组2的引用对象
+     *                          参数3（gid）=当前计算操作位于的索引
+     *                          参数4（c）=结果数组的引用对象
+     *                          参数5（len0）=数组1的长度
+     *                          参数6（len1）=数组2的长度
+     *                          参数7（len2）=结果数组的长度
      * @param type           内核计算的类型 若设置为 int 则此内核只能计算 int 的值
      * @param name           计算内核的名称
      */
@@ -90,6 +98,16 @@ public class KernelSource {
         this.kernelFunction = kernelFunction;
         this.type = type;
         this.name = name;
+    }
+
+
+    /**
+     * 当前的组件是否需要传递长度参数 如果为 false 则不会为长度创建内存空间
+     *
+     * @return 如果需要长度参数 则返回 true
+     */
+    public boolean needLength() {
+        return false;
     }
 
     public String name(){
@@ -107,30 +125,17 @@ public class KernelSource {
 
     /**
      * 获取计算内核源码
-     *
-     * @param type1 内核计算函数，操作数的类型
-     * @param kernelFunction 内核计算函数
-     * @param kName 内核计算模式的名称
      * @return 计算源码
      */
-    public static String getKernelSource(String type1, String kName, KernelFunction kernelFunction) {
-        return
-                "__kernel void " + kName + "(__global const " + type1 + " *a,\n" +
+    public String getKernelSource() {
+        final String type1 = this.getType(), kName = this.name();
+        return "__kernel void " + kName + "(__global const " + type1 + " *a,\n" +
                 "             __global const " + type1 + " *b,\n" +
                 "             __global " + type1 + " *c)\n" +
                 "{\n" +
                 "    int gid = get_global_id(0);\n" +
-                "    " +
-                kernelFunction.calculateKernelSource("a", "b", "gid", "c") +
+                this.kernelFunction.calculateKernelSource("a", "b", "gid", "c") +
                 "\n}";
-    }
-
-    /**
-     * 获取计算内核源码
-     * @return 计算源码
-     */
-    public String getKernelSource() {
-        return getKernelSource(this.getType(), this.name(), this.kernelFunction);
     }
 
     /**
@@ -143,11 +148,22 @@ public class KernelSource {
         return global_work_size.length;
     }
 
-    public void setKernelParam(cl_kernel clKernel, Pointer p1, Pointer p2, Pointer p3) {
+    /**
+     * 设置内核参数
+     *
+     * @param clKernel 内核对象
+     * @param p1       操作数1
+     * @param p2       操作数2
+     * @param p3       结果指针
+     * @param lePoint  长度指针（不是所有的都会使用到此参数）
+     * @return 参数索引 可以用来进行继续追加等操作
+     */
+    public int setKernelParam(cl_kernel clKernel, Pointer p1, Pointer p2, Pointer p3, Pointer lePoint) {
         int argIndex = 0;
         clSetKernelArg(clKernel, argIndex++, Sizeof.cl_mem, p1);
         clSetKernelArg(clKernel, argIndex++, Sizeof.cl_mem, p2);
-        clSetKernelArg(clKernel, argIndex, Sizeof.cl_mem, p3);
+        clSetKernelArg(clKernel, argIndex++, Sizeof.cl_mem, p3);
+        return argIndex;
     }
 
     @Override
