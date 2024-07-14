@@ -26,6 +26,9 @@ public class LengthKernelSource extends KernelSource {
             "    for (int i = index_start; i < index_end; ++i)\n" +
             "        c[i] = b[gid] * a[i - index_start];", "double", "ARRAY_KRONECKER_PRODUCT_ARRAY_DOUBLE");
 
+    public static final LengthKernelSource ARRAY_ENCODE_XOR_ARRAY_CHAR2 = new LengthKernelSource(args -> args[3] + "[" + args[2] + "] = " + args[0] + "[" + args[2] + "] ^ " + args[1] + "[" + args[2] + " % len1];", "char2", "ARRAY_ENCODE_XOR_ARRAY_CHAR2");
+    public static final LengthKernelSource ARRAY_DECODE_XOR_ARRAY_CHAR2 = new LengthKernelSource(args -> args[3] + "[" + args[2] + "] = " + args[0] + "[" + args[2] + "] ^ " + args[1] + "[" + args[2] + " % len1];", "char2", "ARRAY_DECODE_XOR_ARRAY_CHAR2");
+
     /**
      * 对于一个内核计算源码的构造函数
      *

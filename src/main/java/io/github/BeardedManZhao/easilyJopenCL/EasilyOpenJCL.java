@@ -160,6 +160,28 @@ public class EasilyOpenJCL {
      *                   <p>
      *                   The kernel name to be used in this calculation
      */
+    public void calculate(char[] srcArrayA, char[] srcArrayB, char[] dstArray, KernelSource kernelName) {
+        calculate(srcArrayA, srcArrayB, byteBuffer -> byteBuffer.asCharBuffer().get(dstArray), dstArray.length, kernelName);
+    }
+
+    /**
+     * 调用显卡 进行计算数组与数组之间的计算操作
+     * <p>
+     * Calling the graphics card to perform calculation operations between arrays
+     *
+     * @param srcArrayA  需要被计算的数组1
+     *                   <p>
+     *                   Array 1 that needs to be calculated
+     * @param srcArrayB  需要被计算的数组2
+     *                   <p>
+     *                   Array 2 that needs to be calculated
+     * @param dstArray   计算之后的结果存储位
+     *                   <p>
+     *                   Storage bits for calculated results
+     * @param kernelName 本次计算要使用的内核名称
+     *                   <p>
+     *                   The kernel name to be used in this calculation
+     */
     public void calculate(int[] srcArrayA, int[] srcArrayB, int[] dstArray, KernelSource kernelName) {
         calculate(srcArrayA, srcArrayB, byteBuffer -> byteBuffer.asIntBuffer().get(dstArray), dstArray.length, kernelName);
     }
@@ -206,6 +228,31 @@ public class EasilyOpenJCL {
      */
     public void calculate(double[] srcArrayA, double[] srcArrayB, double[] dstArray, KernelSource kernelName) {
         calculate(srcArrayA, srcArrayB, byteBuffer -> byteBuffer.asDoubleBuffer().get(dstArray), dstArray.length, kernelName);
+    }
+
+    /**
+     * 调用显卡 进行计算数组与数组之间的计算操作
+     * <p>
+     * Calling the graphics card to perform calculation operations between arrays
+     *
+     * @param srcArrayA      需要被计算的数组1
+     *                       <p>
+     *                       Array 1 that needs to be calculated
+     * @param srcArrayB      需要被计算的数组2
+     *                       <p>
+     *                       Array 2 that needs to be calculated
+     * @param resultFunc     结果处理函数，此函数会在计算成功之后，将内存中的结果映射到ByteBuffer中，我们可以通过这个函数直接操作结果，有效的避免拷贝
+     *                       <p>
+     *                       Result processing function, which maps the results in memory to ByteBuffer after successful calculation. We can directly manipulate the results through this function, effectively avoiding copying
+     * @param dstArrayLength 结果数组的长度
+     *                       <p>
+     *                       The length of the result array
+     * @param kernelName     本次计算要使用的内核名称
+     *                       <p>
+     *                       The kernel name to be used in this calculation
+     */
+    public void calculate(char[] srcArrayA, char[] srcArrayB, Consumer<ByteBuffer> resultFunc, long dstArrayLength, KernelSource kernelName) {
+        kernelCalculate(srcArrayA.length, srcArrayB.length, resultFunc, dstArrayLength, kernelName, Pointer.to(srcArrayA), Pointer.to(srcArrayB), Sizeof.cl_char2);
     }
 
     /**

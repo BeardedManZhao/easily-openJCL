@@ -14,6 +14,7 @@ import static org.jocl.CL.clSetKernelArg;
 @SuppressWarnings("unused")
 public class KernelSource {
 
+    public static final KernelSource ARRAY_ADD_ARRAY_CHAR2 = new KernelSource(args -> String.format("%s[%s] = %s[%s] + %s[%s];", args[3], args[2], args[0], args[2], args[1], args[2]), "char2", "ARRAY_ADD_ARRAY_CHAR");
     public static final KernelSource ARRAY_ADD_ARRAY_INT = new KernelSource(args -> String.format("%s[%s] = %s[%s] + %s[%s];", args[3], args[2], args[0], args[2], args[1], args[2]), "int", "ARRAY_ADD_ARRAY_INT");
     public static final KernelSource ARRAY_SUB_ARRAY_INT = new KernelSource(args -> String.format("%s[%s] = %s[%s] - %s[%s];", args[3], args[2], args[0], args[2], args[1], args[2]), "int", "ARRAY_SUB_ARRAY_INT");
     public static final KernelSource ARRAY_MUL_ARRAY_INT = new KernelSource(args -> String.format("%s[%s] = %s[%s] * %s[%s];", args[3], args[2], args[0], args[2], args[1], args[2]), "int", "ARRAY_MUL_ARRAY_INT");
@@ -34,6 +35,7 @@ public class KernelSource {
     public static final KernelSource ARRAY_RS_ARRAY_DOUBLE = new KernelSource(args -> String.format("%s[%s] = %s[%s] >> %s[%s];", args[3], args[2], args[0], args[2], args[1], args[2]), "double", "ARRAY_RS_ARRAY_DOUBLE");
 
     /* 上面是 数组与数组之间的计算内核 下面是数组与数值之间的计算内核 */
+    public static final KernelSource ARRAY_ADD_NUMBER_CHAR2 = new KernelSource(args -> String.format("%s[%s] = %s[%s] + %s[0];", args[3], args[2], args[0], args[2], args[1]), "char2", "ARRAY_ADD_NUMBER_CHAR");
     public static final KernelSource ARRAY_ADD_NUMBER_INT = new KernelSource(args -> String.format("%s[%s] = %s[%s] + %s[0];", args[3], args[2], args[0], args[2], args[1]), "int", "ARRAY_ADD_NUMBER_INT");
     public static final KernelSource ARRAY_SUB_NUMBER_INT = new KernelSource(args -> String.format("%s[%s] = %s[%s] - %s[0];", args[3], args[2], args[0], args[2], args[1]), "int", "ARRAY_SUB_NUMBER_INT");
     public static final KernelSource ARRAY_MUL_NUMBER_INT = new KernelSource(args -> String.format("%s[%s] = %s[%s] * %s[0];", args[3], args[2], args[0], args[2], args[1]), "int", "ARRAY_MUL_NUMBER_INT");
@@ -76,6 +78,7 @@ public class KernelSource {
     public static final KernelSource ARRAY_MIN_ARRAY_INT = new KernelSource(args -> String.format("%s[%s] = min(%s[%s], %s[%s]);", args[3], args[2], args[0], args[2], args[1], args[2]), "int", "ARRAY_MIN_ARRAY_INT");
     public static final KernelSource ARRAY_MIN_ARRAY_FLOAT = new KernelSource(args -> String.format("%s[%s] = min(%s[%s], %s[%s]);", args[3], args[2], args[0], args[2], args[1], args[2]), "float", "ARRAY_MIN_ARRAY_FLOAT");
     public static final KernelSource ARRAY_MIN_ARRAY_DOUBLE = new KernelSource(args -> String.format("%s[%s] = min(%s[%s], %s[%s]);", args[3], args[2], args[0], args[2], args[1], args[2]), "double", "ARRAY_MIN_ARRAY_DOUBLE");
+
     protected final KernelFunction kernelFunction;
     private final String type, name;
 

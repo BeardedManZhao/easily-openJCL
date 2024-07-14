@@ -19,7 +19,7 @@ easily-openJCL 是一个轻量级的 Java 语言下的 GPU 显卡 计算库，�
     <dependency>
         <groupId>io.github.BeardedManZhao</groupId>
         <artifactId>easily-openJCL</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </dependency>
 </dependencies>
 ```
@@ -77,6 +77,7 @@ public class Main {
 
 | 计算模式名称                                               | 计算模式支持版本 | 操作数长度规则      | 计算组件解释                       |
 |------------------------------------------------------|----------|--------------|------------------------------|
+| KernelSource.ARRAY_ADD_ARRAY_INT                     | v1.0.3   | 两个操作数一致      | 两个 char2 数组之间进行加法计算          |
 | KernelSource.ARRAY_ADD_ARRAY_INT                     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行加法计算            |
 | KernelSource.ARRAY_SUB_ARRAY_INT                     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行减法计算            |
 | KernelSource.ARRAY_MUL_ARRAY_INT                     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行乘法计算            |
@@ -95,6 +96,7 @@ public class Main {
 | KernelSource.ARRAY_DIV_ARRAY_DOUBLE                  | v1.0     | 两个操作数一致      | 两个 double 数组之间进行除法计算         |
 | KernelSource.ARRAY_LS_ARRAY_DOUBLE                   | v1.0     | 两个操作数一致      | 两个 double 数组之间进行左移计算         |
 | KernelSource.ARRAY_RS_ARRAY_DOUBLE                   | v1.0     | 两个操作数一致      | 两个 double 数组之间进行右移计算         |
+| KernelSource.ARRAY_ADD_NUMBER_INT                    | v1.0.3   | 第二个操作数为1个元素  | char2 数组和 char2数值 之间进行加法计算   |
 | KernelSource.ARRAY_ADD_NUMBER_INT                    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
 | KernelSource.ARRAY_SUB_NUMBER_INT                    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
 | KernelSource.ARRAY_MUL_NUMBER_INT                    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
@@ -134,6 +136,8 @@ public class Main {
 | LengthKernelSource.ARRAY_KRONECKER_PRODUCT_ARRAY_INT | v1.0.2   | 两个操作数长度的乘积   | 两个 int 数组的所有元素的克罗内克乘积        |
 | LengthKernelSource.ARRAY_KRONECKER_PRODUCT_ARRAY_INT | v1.0.2   | 两个操作数长度的乘积   | 两个 float 数组的所有元素的克罗内克乘积      |
 | LengthKernelSource.ARRAY_KRONECKER_PRODUCT_ARRAY_INT | v1.0.2   | 两个操作数长度的乘积   | 两个 double 数组的所有元素的克罗内克乘积     |
+| LengthKernelSource.ARRAY_ENCODE_XOR_ARRAY_CHAR2      | v1.0.3   | 大于等于1        | 对第一个操作数进行 xor 加密运算           |
+| LengthKernelSource.ARRAY_DECODE_XOR_ARRAY_CHAR2      | v1.0.3   | 大于等于1        | 对第一个操作数进行 xor 解密运算           |
 
 #### 数组与数组的计算模式
 
@@ -599,7 +603,62 @@ public class Main {
 
 ## 更新记录
 
-### 2024-07-11 1.0.2 版本开始开发
+### 2024-07-11 1.0.3 版本发布
+
+- 新增了对于 `char` 类型的计算支持
+
+```java
+import io.github.BeardedManZhao.easilyJopenCL.EasilyOpenJCL;
+import io.github.BeardedManZhao.easilyJopenCL.kernel.KernelSource;
+import org.jocl.Sizeof;
+
+public class Main {
+    public static void main(String[] args0) {
+        // 首先准备两个字符数组
+        final char[] a = "ABCD".toCharArray();
+        final char[] b = "1234".toCharArray();
+        // 初始化EasilyOpenJCL 在这里指定组件支持的 内核 这里指定的是将两个字符数组的对应位置的字符 ASCII 相加
+        final EasilyOpenJCL easilyOpenJCL = EasilyOpenJCL.initOpenCLEnvironment(KernelSource.ARRAY_ADD_ARRAY_CHAR2);
+        // 在这里开始计算，相同位置的字符进行相加，结果存放在数组 c 中 例如 ‘A’ + ‘1’ = 65 + 49 = 114 = ‘r’
+        easilyOpenJCL.calculate(a, b, (byteBuffer) -> {
+            for (int i = 0; i < 4; i++) {
+                System.out.print(byteBuffer.getChar(i * Sizeof.cl_char2) + " ");
+            }
+        }, 4, KernelSource.ARRAY_ADD_ARRAY_CHAR2);
+    }
+}
+```
+
+- 可进行加密与解密操作
+
+> 为了可读性，我们在这里使用的是数组方式的计算，这样的计算效率比较地下，建议实际操作中使用 内存操作！
+
+```java
+import io.github.BeardedManZhao.easilyJopenCL.EasilyOpenJCL;
+import io.github.BeardedManZhao.easilyJopenCL.kernel.LengthKernelSource;
+
+public class Main {
+    public static void main(String[] args0) {
+        // 首先准备两个字符数组 第一个是需要被加密的值
+        final char[] a = "ABCD".toCharArray();
+        // 第二个是加/解密的密钥
+        final char[] b = "123".toCharArray();
+        // 准备两个字符数组 用于存放加密/解密结果
+        final char[] c = new char[4], d = new char[4];
+        // 初始化EasilyOpenJCL 在这里指定组件支持的 内核 这里指定的是将两个字符数组的对应位置的字符 ASCII 相加
+        final EasilyOpenJCL easilyOpenJCL = EasilyOpenJCL.initOpenCLEnvironment(
+                LengthKernelSource.ARRAY_ENCODE_XOR_ARRAY_CHAR2,
+                LengthKernelSource.ARRAY_DECODE_XOR_ARRAY_CHAR2
+        );
+        easilyOpenJCL.calculate(a, b, c, LengthKernelSource.ARRAY_ENCODE_XOR_ARRAY_CHAR2);
+        System.out.println("编码结果：" + new String(c));
+        easilyOpenJCL.calculate(c, b, d, LengthKernelSource.ARRAY_DECODE_XOR_ARRAY_CHAR2);
+        System.out.println("解码结果：" + new String(d));
+    }
+}
+```
+
+### 2024-07-12 1.0.2 版本发布
 
 - 新增了幂运算支持 最值比较支持 克罗内克积 计算支持
 - 对于计算操作时 结果指针的内存进行优化 对计算过程的性能进行优化
