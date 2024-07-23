@@ -1,11 +1,13 @@
-![图片7](https://github.com/BeardedManZhao/easily-openJCL/assets/113756063/41d0b04f-2c02-43a9-8e7e-69bd36702e3c) 
+![图片7](https://github.com/BeardedManZhao/easily-openJCL/assets/113756063/41d0b04f-2c02-43a9-8e7e-69bd36702e3c)
+
 # easily-openJCL
 
 ## 什么是 easily-openJCL
 
 easily-openJCL 是一个轻量级的 Java 语言下的 GPU 显卡 计算库，它提供了一套简单易用的 API，让用户能够轻松实现 GPU 计算操作。
 
-通过 Java 调用 GPU 计算的一个库，使用非常简单的API就可以轻松应付 Java 数据类型在 GPU 中的计算操作！easily-openJCL 提供了诸多中计算模式，让我们的计算组件更灵活！
+通过 Java 调用 GPU 计算的一个库，使用非常简单的API就可以轻松应付 Java 数据类型在 GPU 中的计算操作！easily-openJCL
+提供了诸多中计算模式，让我们的计算组件更灵活！
 
 ## 为什么要使用 easily-openJCL
 
@@ -28,7 +30,8 @@ easily-openJCL 是一个轻量级的 Java 语言下的 GPU 显卡 计算库，�
 
 您无需关注一些底层的显存调用，且内置了一些计算内核，若这些已有的计算内核能够满足您，您甚至都不需要去关心计算的实现！下面是一个简单且通用的示例，将两个数组对应元素进行乘法计算，实例中有详细的注释，应该可以让您了解如何使用 `easilyOpenJCL`!
 
-> 值得注意的是 `easilyOpenJCL.calculate` 操作并不会检查您的参数是否符合要求，因为并不是所有的计算模式都必须要满足 操作数的长度相同 的前提！
+> 值得注意的是 `easilyOpenJCL.calculate` 操作并不会检查您的参数是否符合要求，因为并不是所有的计算模式都必须要满足
+> 操作数的长度相同 的前提！
 
 ```java
 import io.github.BeardedManZhao.easilyJopenCL.EasilyOpenJCL;
@@ -184,12 +187,15 @@ public class Main {
     }
 }
 ```
+
 下面是计算结果
+
 ```
 [11.0, 22.0, 33.0, 44.0, 55.0, 66.0, 77.0, 88.0, 99.0, 110.0]
 ================
 [2.0, 8.0, 6.0, 16.0, 10.0, 24.0, 14.0, 32.0, 18.0, 40.0]
 ```
+
 #### 数组与数值的计算模式
 
 ```java
@@ -245,6 +251,7 @@ public class Main {
 ================
 [2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0]
 ```
+
 ### 自定义计算模式
 
 ```java
@@ -286,7 +293,9 @@ public class Main {
     }
 }
 ```
+
 这是计算结果
+
 ```
 [3, 5, 7, 9, 11, 13, 15, 17, 19, 22]
 ```
@@ -602,6 +611,99 @@ public class Main {
 ```
 
 ## 更新记录
+
+### 2024-07-23 1.0.4 版本开发
+
+- 新增了内存空间对象引用关系图的可视化操作
+
+```java
+import io.github.BeardedManZhao.easilyJopenCL.EasilyOpenJCL;
+import io.github.BeardedManZhao.easilyJopenCL.NameMemSpace;
+import io.github.BeardedManZhao.easilyJopenCL.kernel.LengthKernelSource;
+import org.jocl.Pointer;
+import org.jocl.Sizeof;
+import top.lingyuzhao.varFormatter.core.VarFormatter;
+import top.lingyuzhao.varFormatter.utils.DataObj;
+
+public class Main {
+    public static void main(String[] args0) {
+        final EasilyOpenJCL easilyOpenJCL = EasilyOpenJCL.initOpenCLEnvironment(
+                LengthKernelSource.ARRAY_DECODE_XOR_ARRAY_CHAR2,
+                LengthKernelSource.ARRAY_ENCODE_XOR_ARRAY_CHAR2
+        );
+        // 准备两个数组 作为 A_space 空间的内存
+        final char[] a = new char[10];
+        final char[] b = "3009088782343454567566t57".toCharArray();
+        // 将 a b 数组绑定到带名字的内存空间 A_space
+        final NameMemSpace memSpace = easilyOpenJCL.createMemSpace(Pointer.to(a), Pointer.to(b), a.length, b.length, a.length, Sizeof.cl_char2, LengthKernelSource.ARRAY_ENCODE_XOR_ARRAY_CHAR2, "A_space");
+
+        // 准备第二个数组 作为 B_space 中的内存
+        final char[] d = new char[a.length];
+        // 引用 A_space 中 的 a， 这里存的是其中是 a d 数组（为 null 的就代表使用原空间的引用）
+        NameMemSpace merge0 = memSpace.merge(null, Pointer.to(d), -1, d.length, d.length);
+        // 对合并之后的内存空间重命名为 B_space
+        merge0.setMemSpaceName("B_space");
+
+        // 准备第三个数组 作为 C_space 中的内存
+        final char[] e = new char[a.length];
+        // 引用 A_space 中 的 a， 这里存的是其中是 a d 数组（为 null 的就代表使用原空间的引用）
+        NameMemSpace merge1 = merge0.merge(null, Pointer.to(e), -1, e.length, e.length);
+        // 对合并之后的内存空间重命名为 C_space
+        merge1.setMemSpaceName("C_space");
+
+        // 准备第四个数组 作为 D_space 中的内存
+        final char[] f = new char[a.length];
+        // 引用 A_space 中 的 a， 这里存的是其中是 f d 数组（为 null 的就代表使用原空间的引用）
+        NameMemSpace merge2 = merge1.merge(Pointer.to(f), null, f.length, -1, e.length);
+        // 对合并之后的内存空间重命名为 C_space
+        merge1.setMemSpaceName("D_space");
+
+        // 尝试将第三个进行 explain
+        DataObj explain = merge2.explain();
+        // 直接进行绘图 图中可看到此内存空间引用的所有空间
+        explain.setNameJoin(false);
+        String format = VarFormatter.MERMAID.getFormatter(true).format(explain);
+        System.out.println(format);
+    }
+}
+```
+下面就是生成的图，其中不同内存空间如果指向同一个 srcMem 则代表是使用的引用。
+
+```mermaid
+graph LR
+EoCl1715842699[C_space_sub_used]
+N198283540[srcMemA]
+N198208148[srcMemB]
+EoCl1715842699==Map>Map==>N198283540
+
+EoCl1715842699==Map>Map==>N198208148
+
+EoCl1715842699==Map>Map==>EoCl-1244851893
+EoCl-1244851893[D_space_used]
+N225216836[srcMemA]
+N198208148[srcMemB]
+EoCl-1244851893==Map>Map==>N225216836
+
+EoCl-1244851893==Map>Map==>N198208148
+
+EoCl-1244851893==Map>Map==>EoCl1275108041
+EoCl1275108041[B_space_used]
+N225216836[srcMemA]
+N198304868[srcMemB]
+EoCl1275108041==Map>Map==>N225216836
+
+EoCl1275108041==Map>Map==>N198304868
+
+EoCl1275108041==Map>Map==>EoCl387604360
+EoCl387604360[A_space_used]
+N225216836[srcMemA]
+N225223780[srcMemB]
+EoCl387604360==Map>Map==>N225216836
+
+EoCl387604360==Map>Map==>N225223780
+
+EoCl387604360==Map>Map==>EoCl387604360_end[end]
+```
 
 ### 2024-07-11 1.0.3 版本发布
 

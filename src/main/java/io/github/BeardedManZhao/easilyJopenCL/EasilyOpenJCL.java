@@ -136,10 +136,32 @@ public class EasilyOpenJCL {
      *                     The kernel name to be used in this calculation
      * @return MemSpace 用于进行计算操作的 MemSpace 对象，其中包含着您要使用的计算方式
      */
-    public MemSpace createMemSpace(Pointer srcA,
-                                   Pointer srcB,
-                                   long n1, long n2, long n3, int sizeOf, KernelSource kernelSource) {
-        return new MemSpace(this.context, srcA, srcB, n1, n2, n3, sizeOf, kernelSource);
+    public NameMemSpace createMemSpace(Pointer srcA,
+                                       Pointer srcB,
+                                       long n1, long n2, long n3, int sizeOf, KernelSource kernelSource) {
+        return createMemSpace(srcA, srcB, n1, n2, n3, sizeOf, kernelSource, String.valueOf(System.currentTimeMillis()));
+    }
+
+    /**
+     * 创建一个MemSpace对象，用于存储计算所需的数据 也可以传递给显卡进行操作
+     *
+     * @param srcA         操作数1
+     * @param srcB         操作数2
+     * @param n1           操作数1的长度
+     * @param n2           操作数2的长度
+     * @param n3           操作数3的长度
+     * @param sizeOf       操作数中 每个元素所占内存字节数值，可以使用 SizeOf 获取到
+     * @param kernelSource 本次计算要使用的内核名称
+     *                     <p>
+     *                     The kernel name to be used in this calculation
+     * @return MemSpace 用于进行计算操作的 MemSpace 对象，其中包含着您要使用的计算方式
+     */
+    public NameMemSpace createMemSpace(
+            Pointer srcA,
+            Pointer srcB,
+            long n1, long n2, long n3, int sizeOf, KernelSource kernelSource,
+            String spaceName) {
+        return new NameMemSpace(this.context, srcA, srcB, n1, n2, n3, sizeOf, kernelSource, spaceName);
     }
 
     /**
@@ -260,21 +282,21 @@ public class EasilyOpenJCL {
      * <p>
      * Calling the graphics card to perform calculation operations between arrays
      *
-     * @param srcArrayA  需要被计算的数组1
-     *                   <p>
-     *                   Array 1 that needs to be calculated
-     * @param srcArrayB  需要被计算的数组2
-     *                   <p>
-     *                   Array 2 that needs to be calculated
-     * @param resultFunc 结果处理函数，此函数会在计算成功之后，将内存中的结果映射到ByteBuffer中，我们可以通过这个函数直接操作结果，有效的避免拷贝
-     *                   <p>
-     *                   Result processing function, which maps the results in memory to ByteBuffer after successful calculation. We can directly manipulate the results through this function, effectively avoiding copying
+     * @param srcArrayA      需要被计算的数组1
+     *                       <p>
+     *                       Array 1 that needs to be calculated
+     * @param srcArrayB      需要被计算的数组2
+     *                       <p>
+     *                       Array 2 that needs to be calculated
+     * @param resultFunc     结果处理函数，此函数会在计算成功之后，将内存中的结果映射到ByteBuffer中，我们可以通过这个函数直接操作结果，有效的避免拷贝
+     *                       <p>
+     *                       Result processing function, which maps the results in memory to ByteBuffer after successful calculation. We can directly manipulate the results through this function, effectively avoiding copying
      * @param dstArrayLength 结果数组的长度
      *                       <p>
      *                       The length of the result array
-     * @param kernelName 本次计算要使用的内核名称
-     *                   <p>
-     *                   The kernel name to be used in this calculation
+     * @param kernelName     本次计算要使用的内核名称
+     *                       <p>
+     *                       The kernel name to be used in this calculation
      */
     public void calculate(int[] srcArrayA, int[] srcArrayB, Consumer<ByteBuffer> resultFunc, long dstArrayLength, KernelSource kernelName) {
         kernelCalculate(srcArrayA.length, srcArrayB.length, resultFunc, dstArrayLength, kernelName, Pointer.to(srcArrayA), Pointer.to(srcArrayB), Sizeof.cl_int);
@@ -285,21 +307,21 @@ public class EasilyOpenJCL {
      * <p>
      * Calling the graphics card to perform calculation operations between arrays
      *
-     * @param srcArrayA  需要被计算的数组1
-     *                   <p>
-     *                   Array 1 that needs to be calculated
-     * @param srcArrayB  需要被计算的数组2
-     *                   <p>
-     *                   Array 2 that needs to be calculated
-     * @param resultFunc 结果处理函数，此函数会在计算成功之后，将内存中的结果映射到ByteBuffer中，我们可以通过这个函数直接操作结果，有效的避免拷贝
-     *                   <p>
-     *                   Result processing function, which maps the results in memory to ByteBuffer after successful calculation. We can directly manipulate the results through this function, effectively avoiding copying
+     * @param srcArrayA      需要被计算的数组1
+     *                       <p>
+     *                       Array 1 that needs to be calculated
+     * @param srcArrayB      需要被计算的数组2
+     *                       <p>
+     *                       Array 2 that needs to be calculated
+     * @param resultFunc     结果处理函数，此函数会在计算成功之后，将内存中的结果映射到ByteBuffer中，我们可以通过这个函数直接操作结果，有效的避免拷贝
+     *                       <p>
+     *                       Result processing function, which maps the results in memory to ByteBuffer after successful calculation. We can directly manipulate the results through this function, effectively avoiding copying
      * @param dstArrayLength 结果数组的长度
      *                       <p>
      *                       The length of the result array
-     * @param kernelName 本次计算要使用的内核名称
-     *                   <p>
-     *                   The kernel name to be used in this calculation
+     * @param kernelName     本次计算要使用的内核名称
+     *                       <p>
+     *                       The kernel name to be used in this calculation
      */
     public void calculate(float[] srcArrayA, float[] srcArrayB, Consumer<ByteBuffer> resultFunc, long dstArrayLength, KernelSource kernelName) {
         kernelCalculate(srcArrayA.length, srcArrayB.length, resultFunc, dstArrayLength, kernelName, Pointer.to(srcArrayA), Pointer.to(srcArrayB), Sizeof.cl_float);
@@ -310,21 +332,21 @@ public class EasilyOpenJCL {
      * <p>
      * Calling the graphics card to perform calculation operations between arrays
      *
-     * @param srcArrayA  需要被计算的数组1
-     *                   <p>
-     *                   Array 1 that needs to be calculated
-     * @param srcArrayB  需要被计算的数组2
-     *                   <p>
-     *                   Array 2 that needs to be calculated
-     * @param resultFunc 结果处理函数，此函数会在计算成功之后，将内存中的结果映射到ByteBuffer中，我们可以通过这个函数直接操作结果，有效的避免拷贝
-     *                   <p>
-     *                   Result processing function, which maps the results in memory to ByteBuffer after successful calculation. We can directly manipulate the results through this function, effectively avoiding copying
+     * @param srcArrayA      需要被计算的数组1
+     *                       <p>
+     *                       Array 1 that needs to be calculated
+     * @param srcArrayB      需要被计算的数组2
+     *                       <p>
+     *                       Array 2 that needs to be calculated
+     * @param resultFunc     结果处理函数，此函数会在计算成功之后，将内存中的结果映射到ByteBuffer中，我们可以通过这个函数直接操作结果，有效的避免拷贝
+     *                       <p>
+     *                       Result processing function, which maps the results in memory to ByteBuffer after successful calculation. We can directly manipulate the results through this function, effectively avoiding copying
      * @param dstArrayLength 结果数组的长度
      *                       <p>
      *                       The length of the result array
-     * @param kernelName 本次计算要使用的内核名称
-     *                   <p>
-     *                   The kernel name to be used in this calculation
+     * @param kernelName     本次计算要使用的内核名称
+     *                       <p>
+     *                       The kernel name to be used in this calculation
      */
     public void calculate(double[] srcArrayA, double[] srcArrayB, Consumer<ByteBuffer> resultFunc, long dstArrayLength, KernelSource kernelName) {
         kernelCalculate(srcArrayA.length, srcArrayB.length, resultFunc, dstArrayLength, kernelName, Pointer.to(srcArrayA), Pointer.to(srcArrayB), Sizeof.cl_double);
@@ -381,12 +403,12 @@ public class EasilyOpenJCL {
     /**
      * 内核计算
      *
-     * @param clKernel         计算时要使用的内核对象
-     * @param memSpace         内存空间
-     * @param global_work_size 当前要计算的全局尺寸 通常情况下，描述的就是我们的操作数的长宽，一维数组就只有一个元素 代表长度
-     * @param resultFunc       结果处理函数，此函数会在计算成功之后，将内存中的结果映射到ByteBuffer中，我们可以通过这个函数直接操作结果，有效的避免拷贝
-     *                         <p>
-     *                         Result processing function, which maps the results in memory to ByteBuffer after successful calculation. We can directly manipulate the results through this function, effectively avoiding copying
+     * @param clKernel          计算时要使用的内核对象
+     * @param memSpace          内存空间
+     * @param global_work_size  当前要计算的全局尺寸 通常情况下，描述的就是我们的操作数的长宽，一维数组就只有一个元素 代表长度
+     * @param resultFunc        结果处理函数，此函数会在计算成功之后，将内存中的结果映射到ByteBuffer中，我们可以通过这个函数直接操作结果，有效的避免拷贝
+     *                          <p>
+     *                          Result processing function, which maps the results in memory to ByteBuffer after successful calculation. We can directly manipulate the results through this function, effectively avoiding copying
      * @param isReleaseMemSpace 是否释放内存空间，若为false 则您需要手动释放！
      */
     private void kernelCalculateWithMapping(cl_kernel clKernel, MemSpace memSpace, long[] global_work_size,

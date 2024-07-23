@@ -87,13 +87,13 @@ public class KernelSource {
      *
      * @param kernelFunction 内核的计算源码实现函数对象。
      *                       参数说明：
-     *                          参数1（a）=数组1的引用对象
-     *                          参数2（b）=数组2的引用对象
-     *                          参数3（gid）=当前计算操作位于的索引
-     *                          参数4（c）=结果数组的引用对象
-     *                          参数5（len0）=数组1的长度
-     *                          参数6（len1）=数组2的长度
-     *                          参数7（len2）=结果数组的长度
+     *                       参数1（a）=数组1的引用对象
+     *                       参数2（b）=数组2的引用对象
+     *                       参数3（gid）=当前计算操作位于的索引
+     *                       参数4（c）=结果数组的引用对象
+     *                       参数5（len0）=数组1的长度
+     *                       参数6（len1）=数组2的长度
+     *                       参数7（len2）=结果数组的长度
      * @param type           内核计算的类型 若设置为 int 则此内核只能计算 int 的值
      * @param name           计算内核的名称
      */
@@ -113,7 +113,7 @@ public class KernelSource {
         return false;
     }
 
-    public String name(){
+    public String name() {
         return this.name;
     }
 
@@ -128,6 +128,7 @@ public class KernelSource {
 
     /**
      * 获取计算内核源码
+     *
      * @return 计算源码
      */
     public String getKernelSource() {

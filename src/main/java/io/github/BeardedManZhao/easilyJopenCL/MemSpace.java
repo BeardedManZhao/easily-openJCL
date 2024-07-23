@@ -33,16 +33,16 @@ public class MemSpace {
     /**
      * 构造函数
      *
-     * @param context 上下文对象
-     * @param srcA    操作数1
-     * @param srcB    操作数2
-     * @param n1      操作数1的长度
-     * @param n2      操作数2的长度
-     * @param n3      计算结果的长度
-     * @param sizeOf  每个操作数的大小
-     * @param kernelSource        本次计算要使用的内核名称
-     *                          <p>
-     *                          The kernel name to be used in this calculation
+     * @param context      上下文对象
+     * @param srcA         操作数1
+     * @param srcB         操作数2
+     * @param n1           操作数1的长度
+     * @param n2           操作数2的长度
+     * @param n3           计算结果的长度
+     * @param sizeOf       每个操作数的大小
+     * @param kernelSource 本次计算要使用的内核名称
+     *                     <p>
+     *                     The kernel name to be used in this calculation
      */
     public MemSpace(cl_context context, Pointer srcA,
                     Pointer srcB,
