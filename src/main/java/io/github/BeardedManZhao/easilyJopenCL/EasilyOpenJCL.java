@@ -154,7 +154,12 @@ public class EasilyOpenJCL {
      * @param kernelSource 本次计算要使用的内核名称
      *                     <p>
      *                     The kernel name to be used in this calculation
+     * @param spaceName    本空间的名称，通过此参数，可以设置当前内存空间对象的名称，这名称会在可视化的时候起到作用！
+     *                     <p>
+     *                     The name of this space. With this parameter, you can set the name of the current memory space object, which will be used during visualization!
      * @return MemSpace 用于进行计算操作的 MemSpace 对象，其中包含着您要使用的计算方式
+     * <p>
+     * The MemSpace object used for computing operations, which contains the calculation method you want to use
      */
     public NameMemSpace createMemSpace(
             Pointer srcA,

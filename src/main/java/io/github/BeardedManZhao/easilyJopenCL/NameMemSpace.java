@@ -26,14 +26,25 @@ public class NameMemSpace extends MemSpace {
         this.memSpaceName = memSpaceName;
     }
 
+    /**
+     * @return 获取到当前内存空间对象的名称
+     */
     public String getMemSpaceName() {
         return memSpaceName;
     }
 
+    /**
+     * 设置当前内存空间对象的名称
+     *
+     * @param memSpaceName 当前内存空间的新名称
+     */
     public void setMemSpaceName(String memSpaceName) {
         this.memSpaceName = memSpaceName;
     }
 
+    /**
+     * @return 包含着当前内存空间对象引用的数据，可通过 varFormatter 操作进行格式化为图。
+     */
     public DataObj explain() {
         // 首先计算当前的内存空间的名字
         String memSpaceName1 = this.getMemSpaceName();

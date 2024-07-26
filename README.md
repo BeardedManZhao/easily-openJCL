@@ -21,7 +21,7 @@ easily-openJCL 是一个轻量级的 Java 语言下的 GPU 显卡 计算库，�
     <dependency>
         <groupId>io.github.BeardedManZhao</groupId>
         <artifactId>easily-openJCL</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </dependency>
 </dependencies>
 ```
@@ -612,7 +612,7 @@ public class Main {
 
 ## 更新记录
 
-### 2024-07-23 1.0.4 版本开发
+### 2024-07-26 1.0.4 版本发布
 
 - 新增了内存空间对象引用关系图的可视化操作
 
@@ -667,42 +667,35 @@ public class Main {
     }
 }
 ```
+
 下面就是生成的图，其中不同内存空间如果指向同一个 srcMem 则代表是使用的引用。
 
 ```mermaid
 graph LR
-EoCl1715842699[C_space_sub_used]
-N198283540[srcMemA]
-N198208148[srcMemB]
-EoCl1715842699==Map>Map==>N198283540
-
-EoCl1715842699==Map>Map==>N198208148
-
-EoCl1715842699==Map>Map==>EoCl-1244851893
-EoCl-1244851893[D_space_used]
-N225216836[srcMemA]
-N198208148[srcMemB]
-EoCl-1244851893==Map>Map==>N225216836
-
-EoCl-1244851893==Map>Map==>N198208148
-
-EoCl-1244851893==Map>Map==>EoCl1275108041
-EoCl1275108041[B_space_used]
-N225216836[srcMemA]
-N198304868[srcMemB]
-EoCl1275108041==Map>Map==>N225216836
-
-EoCl1275108041==Map>Map==>N198304868
-
-EoCl1275108041==Map>Map==>EoCl387604360
-EoCl387604360[A_space_used]
-N225216836[srcMemA]
-N225223780[srcMemB]
-EoCl387604360==Map>Map==>N225216836
-
-EoCl387604360==Map>Map==>N225223780
-
-EoCl387604360==Map>Map==>EoCl387604360_end[end]
+    EoCl1715842699[C_space_sub_used]
+    N198283540[srcMemA]
+    N198208148[srcMemB]
+    EoCl1715842699 == Map>Map ==> N198283540
+    EoCl1715842699 == Map>Map ==> N198208148
+    EoCl1715842699 == Map>Map ==> EoCl-1244851893
+    EoCl-1244851893[D_space_used]
+    N225216836[srcMemA]
+    N198208148[srcMemB]
+    EoCl-1244851893 == Map>Map ==> N225216836
+    EoCl-1244851893 == Map>Map ==> N198208148
+    EoCl-1244851893 == Map>Map ==> EoCl1275108041
+    EoCl1275108041[B_space_used]
+    N225216836[srcMemA]
+    N198304868[srcMemB]
+    EoCl1275108041 == Map>Map ==> N225216836
+    EoCl1275108041 == Map>Map ==> N198304868
+    EoCl1275108041 == Map>Map ==> EoCl387604360
+    EoCl387604360[A_space_used]
+    N225216836[srcMemA]
+    N225223780[srcMemB]
+    EoCl387604360 == Map>Map ==> N225216836
+    EoCl387604360 == Map>Map ==> N225223780
+    EoCl387604360 == Map>Map ==> EoCl387604360_end[end]
 ```
 
 ### 2024-07-11 1.0.3 版本发布
