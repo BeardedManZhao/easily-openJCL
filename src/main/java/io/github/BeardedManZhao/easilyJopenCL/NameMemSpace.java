@@ -44,6 +44,8 @@ public class NameMemSpace extends MemSpace {
 
     /**
      * @return 包含着当前内存空间对象引用的数据，可通过 varFormatter 操作进行格式化为图。
+     *
+     * Contains data referenced by the current memory space object, which can be formatted into a graph using the varModeler operation.
      */
     public DataObj explain() {
         // 首先计算当前的内存空间的名字

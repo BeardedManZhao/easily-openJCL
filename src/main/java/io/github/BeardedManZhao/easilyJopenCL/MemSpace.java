@@ -157,6 +157,11 @@ public class MemSpace {
         return isNotRelease;
     }
 
+    /**
+     * 释放当前内存空间对象，以及此内存空间对象引用的所有内存空间对象，这是一个链式效应，当调用了此方法后，此内存空间对象以及此处引用的所有内存空间对象都会被释放。
+     * <p>
+     * Releasing the current memory space object, as well as all memory space objects referenced by this memory space object, is a chain effect. When this method is called, this memory space object and all memory space objects referenced here will be released.
+     */
     public void releaseResources() {
         // A 是合并的 我们在这里不要释放 A 要把 A 给 src 用
         // 另一 情况 B 是合并的 我们在这里不要释放 B 要把 B 给 src 用
