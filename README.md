@@ -1,4 +1,4 @@
-![图片7](https://github.com/BeardedManZhao/easily-openJCL/assets/113756063/41d0b04f-2c02-43a9-8e7e-69bd36702e3c)
+![图片5](https://github.com/user-attachments/assets/2e9c9a61-10cf-4fb2-9288-4eb8c90efd67)
 
 # easily-openJCL
 
