@@ -80,7 +80,7 @@ public class Main {
 
 | 计算模式名称                                               | 计算模式支持版本 | 操作数长度规则      | 计算组件解释                       |
 |------------------------------------------------------|----------|--------------|------------------------------|
-| KernelSource.ARRAY_ADD_ARRAY_INT                     | v1.0.3   | 两个操作数一致      | 两个 char2 数组之间进行加法计算          |
+| KernelSource.ARRAY_ADD_ARRAY_CHAR2                   | v1.0.3   | 两个操作数一致      | 两个 char2 数组之间进行加法计算          |
 | KernelSource.ARRAY_ADD_ARRAY_INT                     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行加法计算            |
 | KernelSource.ARRAY_SUB_ARRAY_INT                     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行减法计算            |
 | KernelSource.ARRAY_MUL_ARRAY_INT                     | v1.0     | 两个操作数一致      | 两个 int 数组之间进行乘法计算            |
@@ -99,7 +99,7 @@ public class Main {
 | KernelSource.ARRAY_DIV_ARRAY_DOUBLE                  | v1.0     | 两个操作数一致      | 两个 double 数组之间进行除法计算         |
 | KernelSource.ARRAY_LS_ARRAY_DOUBLE                   | v1.0     | 两个操作数一致      | 两个 double 数组之间进行左移计算         |
 | KernelSource.ARRAY_RS_ARRAY_DOUBLE                   | v1.0     | 两个操作数一致      | 两个 double 数组之间进行右移计算         |
-| KernelSource.ARRAY_ADD_NUMBER_INT                    | v1.0.3   | 第二个操作数为1个元素  | char2 数组和 char2数值 之间进行加法计算   |
+| KernelSource.ARRAY_ADD_NUMBER_CHAR2                  | v1.0.3   | 第二个操作数为1个元素  | char2 数组和 char2数值 之间进行加法计算   |
 | KernelSource.ARRAY_ADD_NUMBER_INT                    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
 | KernelSource.ARRAY_SUB_NUMBER_INT                    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
 | KernelSource.ARRAY_MUL_NUMBER_INT                    | v1.0     | 第二个操作数为1个元素  | int 数组和 int数值 之间进行加法计算       |
